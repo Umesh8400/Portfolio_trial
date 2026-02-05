@@ -5,7 +5,6 @@
 <title>Umesh Joshi | Engineering Portfolio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -17,7 +16,7 @@ body{
   overflow:hidden;
 }
 
-/* ===== SLIDES ===== */
+/* ---------- SLIDES ---------- */
 .slide{
   position:absolute;
   inset:0;
@@ -27,64 +26,24 @@ body{
   flex-direction:column;
   text-align:center;
   opacity:0;
-  transform:translateX(100%);
-  transition:all 1s ease;
+  transform:translateX(60px);
+  transition:opacity .8s ease, transform .8s ease;
   padding:40px;
 }
+.slide.active{opacity:1;transform:none}
+.slide.prev{opacity:0;transform:translateX(-60px)}
 
-.slide.active{
-  opacity:1;
-  transform:translateX(0);
-}
-
-.slide.prev{
-  transform:translateX(-100%);
-}
-
-/* ===== TYPOGRAPHY ===== */
-.big{
-  font-size:clamp(40px,6vw,90px);
-  font-weight:800;
-  letter-spacing:1px;
-}
-
-.medium{
-  font-size:clamp(22px,3vw,36px);
-  font-weight:600;
-  margin-top:20px;
-}
-
-.text{
-  max-width:900px;
-  font-size:clamp(16px,2vw,20px);
-  margin-top:30px;
-  line-height:1.7;
-  color:#cbd5f5;
-}
-
-/* ===== BUTTONS ===== */
-.btns{margin-top:40px;display:flex;gap:20px}
-button{
-  background:linear-gradient(90deg,#14b8a6,#38bdf8);
-  border:none;
-  padding:14px 32px;
-  border-radius:30px;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-  color:#020617;
-}
-
-/* ===== NEXT ===== */
-.next{
+/* ---------- NAV ---------- */
+.nav{
   position:absolute;
   bottom:30px;
-  right:40px;
-  font-size:14px;
+  font-size:13px;
   letter-spacing:2px;
   color:#94a3b8;
-  animation:pulse 1.5s infinite;
+  animation:pulse 1.6s infinite;
 }
+.next{right:40px}
+.back{left:40px}
 
 @keyframes pulse{
   0%{opacity:.4}
@@ -92,39 +51,84 @@ button{
   100%{opacity:.4}
 }
 
-/* ===== SECTION STYLE ===== */
-.section{
-  font-size:clamp(50px,7vw,120px);
-  font-weight:800;
-  letter-spacing:6px;
-  color:#14b8a6;
-}
+/* ---------- TYPO ---------- */
+.big{font-size:clamp(40px,6vw,90px);font-weight:800}
+.medium{font-size:clamp(22px,3vw,36px);margin-top:20px}
+.text{max-width:900px;margin-top:30px;line-height:1.7;color:#cbd5f5}
+.section{font-size:clamp(60px,7vw,120px);font-weight:800;letter-spacing:6px;color:#14b8a6}
 
-/* ===== EXPERIENCE BOX ===== */
+/* ---------- BOX ---------- */
 .box{
   border:1px solid #1e293b;
-  padding:30px;
-  border-radius:20px;
+  padding:32px;
+  border-radius:22px;
   max-width:900px;
   text-align:left;
 }
 .box h3{font-size:26px;margin-bottom:10px}
-.box p{color:#94a3b8;margin-bottom:15px}
-.box ul{padding-left:20px}
+.box p{color:#94a3b8;margin-bottom:14px}
 .box li{margin-bottom:10px}
+
+/* ---------- BUTTONS ---------- */
+.btns{margin-top:40px;display:flex;gap:20px}
+button{
+  background:linear-gradient(90deg,#14b8a6,#38bdf8);
+  border:none;
+  padding:14px 34px;
+  border-radius:30px;
+  font-weight:700;
+  cursor:pointer;
+  color:#020617;
+}
+
+/* ---------- INTRO CIRCLE ---------- */
+.circle{
+  position:relative;
+  width:300px;height:300px;
+}
+.circle span{
+  position:absolute;
+  font-weight:600;
+  color:#94a3b8;
+}
+.center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:64px;
+  font-weight:800;
+  color:#e5e7eb;
+}
+
+/* ---------- DAY / NIGHT ---------- */
+.day{
+  background:radial-gradient(circle at top,#fde68a,#60a5fa,#020617);
+}
+.night{
+  background:radial-gradient(circle at top,#1e293b,#020617);
+}
 </style>
 </head>
 
 <body>
 
-<!-- SLIDE 0 -->
-<section class="slide active">
-  <div class="big">Hello · Hallo</div>
-  <div class="medium">Welcome to my engineering portfolio</div>
-  <div class="next">NEXT →</div>
+<!-- SLIDE 0 : HELLO -->
+<section class="slide active" id="introSlide">
+  <div class="circle">
+    <div class="center">HALLO</div>
+    <span style="top:0;left:50%">Hello</span>
+    <span style="right:0;top:50%">Hola</span>
+    <span style="bottom:0;left:50%">Bonjour</span>
+    <span style="left:0;top:50%">你好</span>
+    <span style="top:20%;left:10%">नमस्ते</span>
+    <span style="bottom:20%;right:10%">नमस्कार</span>
+  </div>
+  <div class="nav next">NEXT →</div>
 </section>
 
-<!-- SLIDE 1 -->
+<!-- SLIDE 1 : LANGUAGE -->
 <section class="slide">
   <div class="big">Choose Language</div>
   <div class="btns">
@@ -133,110 +137,103 @@ button{
   </div>
 </section>
 
-<!-- SLIDE 2 -->
+<!-- SLIDE 2 : INTRO -->
 <section class="slide">
-  <div class="big" id="introTitle">Hello, I am Umesh Joshi</div>
-  <div class="text" id="introText">
-    I am a Master’s student in Renewable Energies and E-Mobility with strong industrial experience
-    in battery development, modeling, testing, and validation within the automotive sector.
-  </div>
-  <div class="next">NEXT →</div>
+  <div class="big" id="title"></div>
+  <div class="text" id="summary"></div>
+  <div class="nav back">← BACK</div>
+  <div class="nav next">NEXT →</div>
 </section>
 
 <!-- SLIDE 3 -->
 <section class="slide">
-  <div class="section">EXPERIENCE</div>
+  <div class="section" id="expTitle"></div>
 </section>
 
 <!-- SLIDE 4 -->
 <section class="slide">
-  <div class="box">
-    <h3>Working Student – Battery Development</h3>
-    <p>Mercedes-Benz AG · Stuttgart</p>
-    <ul>
-      <li>Battery voltage relaxation modeling for machine-learning frameworks</li>
-      <li>Creation of anomaly datasets from experimental battery data</li>
-    </ul>
-  </div>
-  <div class="next">NEXT →</div>
+  <div class="box" id="exp1"></div>
+  <div class="nav back">← BACK</div>
+  <div class="nav next">NEXT →</div>
 </section>
 
 <!-- SLIDE 5 -->
 <section class="slide">
-  <div class="box">
-    <h3>Master Thesis – Battery Modeling (Grade 1.0)</h3>
-    <p>Mercedes-Benz AG</p>
-    <ul>
-      <li>Advanced Python-based modeling of lithium-ion batteries</li>
-      <li>Accuracy improvement up to 85% using optimization techniques</li>
-    </ul>
-  </div>
-  <div class="next">NEXT →</div>
+  <div class="section" id="eduTitle"></div>
 </section>
 
 <!-- SLIDE 6 -->
 <section class="slide">
-  <div class="section">EDUCATION</div>
-</section>
-
-<!-- SLIDE 7 -->
-<section class="slide">
-  <div class="box">
-    <h3>M.Sc. Renewable Energies & E-Mobility</h3>
-    <p>Hochschule Stralsund · Germany</p>
-  </div>
-  <div class="next">NEXT →</div>
-</section>
-
-<!-- SLIDE 8 -->
-<section class="slide">
-  <div class="section">PROJECTS</div>
-</section>
-
-<!-- SLIDE 9 -->
-<section class="slide">
-  <div class="box">
-    <h3>Electromagnetic Railgun – Bachelor Project</h3>
-    <ul>
-      <li>Linear electromagnetic acceleration system</li>
-      <li>Published research project</li>
-    </ul>
-  </div>
-  <div class="next">NEXT →</div>
-</section>
-
-<!-- SLIDE 10 -->
-<section class="slide">
-  <div class="big">Thank You</div>
-  <div class="text">
-    Thank you for visiting my portfolio.<br>
-    Feel free to connect with me on LinkedIn or via email.
-  </div>
+  <div class="big" id="thanks"></div>
 </section>
 
 <script>
 const slides=document.querySelectorAll('.slide');
 let current=0;
-let lang='en';
+let lang=null;
 
+/* -------- DAY / NIGHT -------- */
+const h=new Date().getHours();
+document.getElementById('introSlide').classList.add(h>=6&&h<18?'day':'night');
+
+/* -------- CONTENT -------- */
+const TEXT={
+  en:{
+    title:'Hello, I am Umesh Joshi',
+    summary:'I am a Master’s student in Renewable Energies and E-Mobility with industrial experience in battery development, modeling, testing, and validation within the automotive sector.',
+    expTitle:'EXPERIENCE',
+    eduTitle:'EDUCATION',
+    exp1:`<h3>Working Student – Battery Development</h3>
+          <p>Mercedes-Benz AG · Stuttgart</p>
+          <ul>
+            <li>Battery voltage relaxation modeling for ML frameworks</li>
+            <li>Anomaly datasets from experimental battery data</li>
+          </ul>`,
+    thanks:'Thank you for visiting my portfolio'
+  },
+  de:{
+    title:'Hallo, ich bin Umesh Joshi',
+    summary:'Ich bin Masterstudent im Bereich Erneuerbare Energien und E-Mobility mit industrieller Erfahrung in der Batterieentwicklung, Modellierung, Prüfung und Validierung.',
+    expTitle:'BERUFSERFAHRUNG',
+    eduTitle:'AUSBILDUNG',
+    exp1:`<h3>Werkstudent – Batterieentwicklung</h3>
+          <p>Mercedes-Benz AG · Stuttgart</p>
+          <ul>
+            <li>Spannungsrelaxationsmodelle für ML-Anwendungen</li>
+            <li>Anomalie-Datensätze aus Batteriemessungen</li>
+          </ul>`,
+    thanks:'Vielen Dank für Ihren Besuch'
+  }
+};
+
+/* -------- NAV -------- */
 function show(n){
+  if(n<0||n>=slides.length)return;
   slides[current].classList.remove('active');
   slides[current].classList.add('prev');
   current=n;
   slides[current].classList.add('active');
 }
 
-document.addEventListener('click',()=>{
-  if(current<slides.length-1) show(current+1);
+document.addEventListener('click',e=>{
+  if(e.target.closest('button'))return;
+  show(current+1);
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight')show(current+1);
+  if(e.key==='ArrowLeft')show(current-1);
 });
 
 function setLang(l){
   lang=l;
-  if(lang==='de'){
-    document.getElementById('introTitle').innerText='Hallo, ich bin Umesh Joshi';
-    document.getElementById('introText').innerText=
-      'Ich bin Masterstudent im Bereich Erneuerbare Energien und E-Mobility mit industrieller Erfahrung in der Batterieentwicklung, Modellierung und Validierung.';
-  }
+  const t=TEXT[l];
+  title.innerHTML=t.title;
+  summary.innerHTML=t.summary;
+  expTitle.innerHTML=t.expTitle;
+  eduTitle.innerHTML=t.eduTitle;
+  exp1.innerHTML=t.exp1;
+  thanks.innerHTML=t.thanks;
   show(2);
 }
 </script>
