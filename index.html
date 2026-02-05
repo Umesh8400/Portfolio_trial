@@ -3,40 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Umesh Joshi | Portfolio</title>
+    <title>Umesh Joshi | Engineering Portfolio</title>
     <style>
-        /* --- CSS STYLES --- */
+        /* --- CSS VARIABLES & RESET --- */
         :root {
-            --primary: #3498db; /* Professional Blue */
-            --dark: #0f172a;    /* Deep Navy/Black */
-            --light: #f8fafc;   /* Off-white */
-            --overlay: rgba(15, 23, 42, 0.85); /* Dark overlay for readability */
+            --primary: #3498db; 
+            --accent: #f1c40f; /* Gold for highlights */
+            --dark: #0f172a;    
+            --light: #f8fafc;   
+            --overlay: rgba(15, 23, 42, 0.9);
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
         
-        body { background-color: var(--dark); color: var(--light); overflow: hidden; height: 100vh; width: 100vw; }
+        body { 
+            background-color: var(--dark); 
+            color: var(--light); 
+            overflow: hidden; 
+            height: 100vh; 
+            width: 100vw; 
+            user-select: none; /* Prevent text highlighting on clicks */
+        }
 
-        /* Background Image container */
+        /* --- DYNAMIC BACKGROUNDS --- */
         #bg-image {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover;
             background-position: center;
             z-index: -2;
-            transition: background-image 1s ease-in-out;
-            filter: blur(2px);
+            transition: background-image 1.2s ease-in-out, opacity 1s;
+        }
+
+        /* Specific Backgrounds for Time of Day (CSS Generated) */
+        .bg-day { background: linear-gradient(to bottom, #2980b9, #87CEFA); }
+        .bg-sunset { background: linear-gradient(to bottom, #2c3e50, #fd746c, #ff9068); }
+        .bg-night { 
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); 
+            overflow: hidden;
         }
         
-        /* Dark overlay to make text readable */
+        /* Stars for Night Mode */
+        .stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent;
+            z-index: -1;
+            display: none; /* Hidden by default */
+        }
+        .bg-night .stars { display: block; background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px); background-size: 550px 550px; }
+
+        /* Overlay */
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: var(--overlay);
             z-index: -1;
+            transition: opacity 1s;
         }
+        /* Less overlay on start screen to see the "sky" */
+        .start-mode .overlay { opacity: 0.3; } 
 
-        /* Slide Container */
+        /* --- SLIDE CONTAINER & TRANSITIONS --- */
         .slide-container {
             display: flex;
             flex-direction: column;
@@ -46,172 +75,247 @@
             padding: 2rem;
             text-align: center;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: scale(0.95) translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: none; /* Prevent clicks when hidden */
+            position: absolute;
+            width: 100%;
         }
 
         .slide-container.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
+            pointer-events: all;
         }
 
-        /* Typography */
-        h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; letter-spacing: -1px; }
-        h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
-        h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-        h4 { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; font-style: italic; }
-        p { font-size: 1.1rem; line-height: 1.6; max-width: 800px; margin: 0 auto 1rem auto; }
+        /* --- TYPOGRAPHY --- */
+        h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; letter-spacing: -1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        h3 { font-size: 1.5rem; margin-bottom: 1rem; font-weight: 300; }
+        h4 { font-size: 1.2rem; color: #cbd5e1; margin-bottom: 1.5rem; font-style: italic; }
+        p { font-size: 1.15rem; line-height: 1.8; max-width: 800px; margin: 0 auto 1rem auto; color: #e2e8f0; }
+
+        /* BIG SECTION TITLES (Experience, Education) */
+        .section-title h1 {
+            font-size: 6rem; /* Massive */
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            background: -webkit-linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */ /* Optional: transparent gradient text */
+            color: #fff;
+            animation: tracking-in 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
+
+        @keyframes tracking-in {
+            0% { letter-spacing: -0.5em; opacity: 0; }
+            40% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* Skills Tags */
+        .skills-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 800px; }
+        .skills-tag { 
+            background: rgba(255, 255, 255, 0.1); 
+            border-left: 3px solid var(--primary); 
+            padding: 8px 20px; 
+            font-size: 1rem; 
+            backdrop-filter: blur(5px);
+            transition: transform 0.2s;
+        }
+        .skills-tag:hover { transform: translateY(-3px); background: rgba(52, 152, 219, 0.3); }
+
+        /* --- CIRCULAR GREETING ANIMATION --- */
+        .greeting-circle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         
-        .skills-tag { display: inline-block; background: rgba(52, 152, 219, 0.2); border: 1px solid var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; margin: 5px; }
-
-        /* Buttons */
-        .btn-group { margin-top: 2rem; }
-        .btn {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border: 2px solid var(--light);
-            background: transparent;
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 0 10px;
-            text-decoration: none;
-            display: inline-block;
+        .main-hello {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            z-index: 10;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
-        .btn:hover { background: var(--light); color: var(--dark); }
 
-        /* Flashing Next Button */
-        .next-btn-container {
+        .orbit-text {
+            position: absolute;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.6);
+            white-space: nowrap;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        }
+        
+        /* Stagger animations for different languages */
+        .orbit-text:nth-child(2) { animation-delay: -0s; }
+        .orbit-text:nth-child(3) { animation-delay: -4s; }
+        .orbit-text:nth-child(4) { animation-delay: -8s; }
+        .orbit-text:nth-child(5) { animation-delay: -12s; }
+        .orbit-text:nth-child(6) { animation-delay: -16s; }
+
+        /* --- NAVIGATION BUTTONS --- */
+        .nav-btn {
             position: absolute;
             bottom: 40px;
-            right: 40px;
             cursor: pointer;
-            display: none; /* Hidden on language selection */
-            z-index: 10;
-        }
-        
-        .next-btn {
-            font-size: 1.2rem;
+            z-index: 100;
+            font-size: 1.1rem;
             font-weight: bold;
-            color: var(--primary);
-            background: transparent;
-            border: none;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 10px 20px;
+            transition: 0.3s;
+            opacity: 0.7;
         }
+
+        .nav-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--primary); }
+
+        .next-btn { right: 40px; color: var(--primary); animation: pulse 2s infinite; }
+        .prev-btn { left: 40px; color: #fff; display: none; } /* Hidden initially */
 
         @keyframes pulse {
-            0% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.5; transform: scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        /* Contact Icons */
-        .contact-links a { color: var(--light); font-size: 1.2rem; margin: 0 15px; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .contact-links a:hover { border-bottom: 1px solid var(--primary); color: var(--primary); }
-
-        /* Profile Photo Styling */
+        /* Profile Photo */
         .profile-photo {
-            width: 180px;
-            height: 180px;
+            width: 180px; height: 180px;
             border-radius: 50%;
             border: 4px solid var(--primary);
             object-fit: cover;
             margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.4);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.5rem; }
-            .next-btn-container { bottom: 20px; right: 20px; }
+        /* Language Buttons */
+        .btn-group { margin-top: 2rem; z-index: 20; position: relative;}
+        .lang-btn {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
         }
+        .lang-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        /* Click Zones for Arrows */
+        .click-zone-right { position: absolute; right: 0; top: 0; width: 30%; height: 100%; z-index: 5; cursor: e-resize; }
+        .click-zone-left { position: absolute; left: 0; top: 0; width: 10%; height: 100%; z-index: 5; cursor: w-resize; display: none; }
+
     </style>
 </head>
-<body>
+<body onload="initTimeBasedBackground()">
 
+    <div id="stars-layer" class="stars"></div>
     <div id="bg-image"></div>
-    <div class="overlay"></div>
+    <div class="overlay" id="main-overlay"></div>
 
-    <main id="content" class="slide-container active">
-        </main>
+    <div class="click-zone-right" onclick="nextSlide()"></div>
+    <div class="click-zone-left" id="zoneLeft" onclick="prevSlide()"></div>
 
-    <div class="next-btn-container" id="nextBtn" onclick="nextSlide()">
-        <span id="nextText">NEXT</span> <span>&#10140;</span>
+    <div id="splash-screen" class="slide-container active">
+        <div class="greeting-circle">
+            <div class="main-hello" id="center-hello">Hallo</div>
+            <div class="orbit-text">Hello</div>
+            <div class="orbit-text">Namaskar</div>
+            <div class="orbit-text">Bonjour</div>
+            <div class="orbit-text">Hola</div>
+            <div class="orbit-text">Guten Tag</div>
+        </div>
+        
+        <p id="time-msg" style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 2rem;"></p>
+        
+        <div class="btn-group">
+            <button class="lang-btn" onclick="startPortfolio('en')">English</button>
+            <button class="lang-btn" onclick="startPortfolio('de')">Deutsch</button>
+        </div>
+    </div>
+
+    <div id="content-screen" class="slide-container">
+        </div>
+
+    <div class="nav-btn prev-btn" id="prevBtn" onclick="prevSlide()">
+        <span>&#8592;</span> <span id="prevText">BACK</span>
+    </div>
+
+    <div class="nav-btn next-btn" id="nextBtn" onclick="nextSlide()" style="display: none;">
+        <span id="nextText">NEXT</span> <span>&#8594;</span>
     </div>
 
     <script>
-        // --- DATA OBJECT (English & German) ---
+        // --- DATA REPOSITORY ---
+        [cite_start]// Includes citations from your CV [cite: 1, 49, 12, 32]
         const data = {
             en: [
                 {
                     type: "intro",
-                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop", // Tech generic
+                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
                     title: "Hello, I am Umesh Joshi",
                     subtitle: "M.Eng. Renewable Energies & E-Mobility",
-                    text: "An innovative Electrical Engineer specializing in Battery Development, Algorithms, and System Validation. Currently shaping the future of EV technology.",
+                    text: "Electrical Engineer specializing in Battery Development, Algorithms, and System Validation.",
                     photo: true
                 },
-                { type: "title", title: "EXPERIENCE", bg: "https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1920&auto=format&fit=crop" }, // Automotive
+                { type: "section", title: "EXPERIENCE", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" }, // Car visuals
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?q=80&w=1920&auto=format&fit=crop", // Data/Charts
+                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?auto=format&fit=crop&w=1920&q=80",
                     title: "Mercedes-Benz AG",
-                    role: "Master Thesis Student (12.2024 - 07.2025)",
-                    details: "Modeling and prediction of voltage relaxation behavior in Li-Ion batteries.<br><br>• Developed advanced Python frameworks for relaxation models.<br>• Improved model accuracy by 80-85% using adaptive optimization.<br>• Enhanced SOC estimation for reliable battery performance."
+                    role: "Master Thesis (12.2024 - 07.2025)",
+                    details: "Modeling voltage relaxation behavior in Li-Ion batteries.<br>• Improved model accuracy by 80-85% using adaptive optimization.<br>• Enhanced SOC estimation for reliable performance."
                 },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?q=80&w=1920&auto=format&fit=crop", // Simulation
+                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?auto=format&fit=crop&w=1920&q=80",
                     title: "Mercedes-Benz AG",
-                    role: "Working Student - HV Battery Development (02.2024 - 11.2024)",
-                    details: "System Pre-development.<br><br>• Automated data analysis with MATLAB, reducing manual effort by 95-98%.<br>• Setup 3D simulation models in CST-Studio Suite.<br>• Conducted impedance measurements."
+                    role: "Working Student - HV Battery (02.2024 - 11.2024)",
+                    details: "System Pre-development.<br>• Automated data analysis with MATLAB (95-98% reduction).<br>• Setup 3D simulation models in CST-Studio Suite."
                 },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1920&auto=format&fit=crop", // Hardware/Testing
+                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80",
                     title: "ElringKlinger AG",
-                    role: "Working Student & Intern (05.2023 - 01.2024)",
-                    details: "Battery System Tests and Validation.<br><br>• Validated battery systems, ECUs, and drives for safety standards.<br>• Analyzed measurement results using X-Frame and DIAdem.<br>• Hardware design support for microcontrollers."
+                    role: "Battery System Tests (05.2023 - 01.2024)",
+                    details: "Validation of battery systems & ECUs.<br>• Analyzed measurement results using X-Frame and DIAdem.<br>• Supported hardware design of microcontrollers."
                 },
-                { type: "title", title: "EDUCATION", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop" }, // University
+                { type: "section", title: "EDUCATION", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1920&auto=format&fit=crop", // Study
+                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
                     title: "Hochschule Stralsund",
                     role: "Master in Renewable Energies & E-Mobility",
-                    details: "Focus: Vehicle Management Systems, Simulation, System Theory, Hydrogen Technology, Electric Drives Control."
+                    details: "Focus: Vehicle Simulation, Hydrogen Tech, Electric Drives Control."
                 },
                 {
                     type: "content",
-                    bg: "",
-                    title: "University of Mumbai",
-                    role: "Bachelor of Engineering - Electrical Engineering",
-                    details: "Grade: 1.3 | Second Place Award<br>Projects: Electromagnetic Space Shuttle Launch System."
-                },
-                {
-                    type: "content",
-                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920&auto=format&fit=crop", // Dashboard
+                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80",
                     title: "Technical Skills",
                     role: "Software & Tools",
                     isSkills: true,
-                    skills: ["MATLAB/Simulink", "Python", "Machine Learning (AI/ML)", "CANoe/CANalyzer", "PREEvision", "LT Spice", "GitHub"]
-                },
-                {
-                    type: "content",
-                    bg: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1920&auto=format&fit=crop", // Driving
-                    title: "Additional Info",
-                    role: "Languages & Driving",
-                    details: "• <strong>Languages:</strong> English (C1), German (B2.1), Marathi/Hindi (Native)<br>• <strong>Driving License:</strong> Indian License held, German License in process."
+                    skills: ["MATLAB/Simulink", "Python", "Machine Learning", "CANoe", "PREEvision", "LT Spice", "GitHub", "C/C++"]
                 },
                 {
                     type: "end",
-                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1920&auto=format&fit=crop", // Typing
+                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1920&q=80",
                     title: "Thank You",
                     subtitle: "Let's Connect",
                     links: true
@@ -220,67 +324,53 @@
             de: [
                 {
                     type: "intro",
-                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
                     title: "Hallo, ich bin Umesh Joshi",
                     subtitle: "M.Eng. Erneuerbare Energien & E-Mobilität",
-                    text: "Ein innovativer Elektroingenieur spezialisiert auf Batterieentwicklung, Algorithmen und Systemvalidierung. Ich gestalte die Zukunft der E-Mobilität.",
+                    text: "Elektroingenieur spezialisiert auf Batterieentwicklung, Algorithmen und Systemvalidierung.",
                     photo: true
                 },
-                { type: "title", title: "BERUFSERFAHRUNG", bg: "https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1920&auto=format&fit=crop" },
+                { type: "section", title: "ERFAHRUNG", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?auto=format&fit=crop&w=1920&q=80",
                     title: "Mercedes-Benz AG",
                     role: "Masterarbeit (12.2024 - 07.2025)",
-                    details: "Modellierung und Vorhersage des Spannungsrelaxationsverhaltens in Li-Ionen-Batterien.<br><br>• Entwicklung moderner Python-Frameworks für Relaxationsmodelle.<br>• Verbesserung der Modellgenauigkeit um 80-85% durch adaptive Optimierung.<br>• Deutliche Verbesserung der SOC-Schätzgenauigkeit."
+                    details: "Modellierung des Spannungsrelaxationsverhaltens.<br>• Verbesserung der Modellgenauigkeit um 80-85%.<br>• Optimierung der SOC-Schätzung."
                 },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?auto=format&fit=crop&w=1920&q=80",
                     title: "Mercedes-Benz AG",
-                    role: "Werkstudent - HV Batterieentwicklung (02.2024 - 11.2024)",
-                    details: "Systemvorentwicklung.<br><br>• Automatisierte Analyse mit MATLAB (95-98% Zeitersparnis).<br>• Aufbau von 3D-Simulationsmodellen in CST-Studio Suite.<br>• Durchführung von Impedanzmessungen."
+                    role: "Werkstudent - HV Batterie (02.2024 - 11.2024)",
+                    details: "Systemvorentwicklung.<br>• Automatisierte Analyse mit MATLAB (95-98% Reduktion).<br>• 3D-Simulationsmodelle in CST-Studio."
                 },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80",
                     title: "ElringKlinger AG",
-                    role: "Werkstudent & Praktikant (05.2023 - 01.2024)",
-                    details: "Batteriesystemtests und Validierung.<br><br>• Testen von Batteriekomponenten und -zellen.<br>• Auswertung von Messergebnissen mit X-Frame und DIAdem.<br>• Mitarbeit am Hardware-Design von ECUs."
+                    role: "Batteriesystemtests (05.2023 - 01.2024)",
+                    details: "Validierung von Batteriesystemen.<br>• Auswertung mit X-Frame und DIAdem.<br>• Hardware-Design von Mikrocontrollern."
                 },
-                { type: "title", title: "AUSBILDUNG", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop" },
+                { type: "section", title: "AUSBILDUNG", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
-                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
                     title: "Hochschule Stralsund",
-                    role: "Master in Erneuerbare Energien und E-Mobilität",
-                    details: "Schwerpunkte: Fahrzeugsimulation, Systemtheorie, Wasserstofftechnologie, Steuerung elektrischer Antriebe."
+                    role: "Master in Erneuerbare Energien",
+                    details: "Schwerpunkte: Fahrzeugsimulation, Wasserstofftechnologie, Elektrische Antriebe."
                 },
                 {
                     type: "content",
-                    bg: "",
-                    title: "University of Mumbai",
-                    role: "Bachelor of Engineering - Elektrotechnik",
-                    details: "Note: 1.3 | Auszeichnung für den 2. Platz<br>Projekte: Elektromagnetisches Space Shuttle Startsystem."
-                },
-                {
-                    type: "content",
-                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=80",
                     title: "Kenntnisse",
                     role: "Software & Tools",
                     isSkills: true,
-                    skills: ["MATLAB/Simulink", "Python", "Machine Learning (AI/ML)", "CANoe/CANalyzer", "PREEvision", "LT Spice", "GitHub"]
-                },
-                {
-                    type: "content",
-                    bg: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1920&auto=format&fit=crop",
-                    title: "Sonstiges",
-                    role: "Sprachen & Führerschein",
-                    details: "• <strong>Sprachen:</strong> Englisch (C1), Deutsch (B2.1), Marathi/Hindi (Muttersprache)<br>• <strong>Führerschein:</strong> Indischer Führerschein vorhanden, deutscher Führerschein in Bearbeitung."
+                    skills: ["MATLAB/Simulink", "Python", "Machine Learning", "CANoe", "PREEvision", "LT Spice", "GitHub", "C/C++"]
                 },
                 {
                     type: "end",
-                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1920&auto=format&fit=crop",
+                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1920&q=80",
                     title: "Vielen Dank",
                     subtitle: "Kontaktieren Sie mich",
                     links: true
@@ -288,130 +378,156 @@
             ]
         };
 
-        // --- LOGIC ---
-        let currentLang = 'en'; // default
-        let slideIndex = -1; // -1 means language selection screen
-        
-        const contentDiv = document.getElementById('content');
+        // --- STATE & VARIABLES ---
+        let currentLang = 'en';
+        let slideIndex = 0;
+        let isStarted = false;
+
+        const splashScreen = document.getElementById('splash-screen');
+        const contentScreen = document.getElementById('content-screen');
         const bgDiv = document.getElementById('bg-image');
         const nextBtn = document.getElementById('nextBtn');
-        const nextText = document.getElementById('nextText');
+        const prevBtn = document.getElementById('prevBtn');
+        const overlay = document.getElementById('main-overlay');
+        const zoneLeft = document.getElementById('zoneLeft');
 
-        // Initial Load: Language Selection
-        function loadLanguageScreen() {
-            // Set generic tech background
-            bgDiv.style.backgroundImage = "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop')";
-            
-            contentDiv.innerHTML = `
-                <h1>Welcome / Willkommen</h1>
-                <p>Please select your preferred language<br>Bitte wählen Sie Ihre bevorzugte Sprache</p>
-                <div class="btn-group">
-                    <button class="btn" onclick="startPortfolio('en')">English</button>
-                    <button class="btn" onclick="startPortfolio('de')">Deutsch</button>
-                </div>
-            `;
-            contentDiv.classList.add('active');
-            nextBtn.style.display = 'none';
+        // --- 1. TIME-BASED BACKGROUND LOGIC ---
+        function initTimeBasedBackground() {
+            const hour = new Date().getHours();
+            const timeMsg = document.getElementById('time-msg');
+            const body = document.body;
+
+            // Remove any existing bg classes
+            body.classList.remove('bg-day', 'bg-sunset', 'bg-night');
+            body.classList.add('start-mode'); // Less overlay transparency
+
+            if (hour >= 6 && hour < 18) {
+                // DAY (6 AM - 6 PM)
+                body.classList.add('bg-day');
+                timeMsg.innerText = "Current Atmosphere: Sunny/Cloudy Day";
+            } else if (hour >= 18 && hour < 20) {
+                // SUNSET (6 PM - 8 PM)
+                body.classList.add('bg-sunset');
+                timeMsg.innerText = "Current Atmosphere: Sunset Evening";
+            } else {
+                // NIGHT (8 PM - 6 AM)
+                body.classList.add('bg-night');
+                timeMsg.innerText = "Current Atmosphere: Clear Night Sky";
+            }
         }
 
-        // Start the Loop
+        // --- 2. START PORTFOLIO ---
         function startPortfolio(lang) {
             currentLang = lang;
+            isStarted = true;
             slideIndex = 0;
+
+            // Update UI Text
+            document.getElementById('nextText').innerText = lang === 'en' ? "NEXT" : "WEITER";
+            document.getElementById('prevText').innerText = lang === 'en' ? "BACK" : "ZURÜCK";
+
+            // Hide Splash, Show Nav
+            splashScreen.classList.remove('active');
+            document.body.classList.remove('start-mode'); // Darken overlay
             
-            // Update Next Button Text based on language
-            nextText.innerText = lang === 'en' ? "NEXT" : "WEITER";
-            
-            // Fade out current content, then load next
-            contentDiv.classList.remove('active');
             setTimeout(() => {
-                renderSlide();
+                splashScreen.style.display = 'none';
+                contentScreen.style.display = 'flex';
                 nextBtn.style.display = 'flex';
+                prevBtn.style.display = 'flex';
+                zoneLeft.style.display = 'block';
+                renderSlide();
             }, 800);
         }
 
-        // Handle "Next" Click
+        // --- 3. NAVIGATION LOGIC ---
         function nextSlide() {
+            if (!isStarted) return;
             const totalSlides = data[currentLang].length;
-            
+
             if (slideIndex < totalSlides - 1) {
-                // Fade out
-                contentDiv.classList.remove('active');
-                
-                setTimeout(() => {
-                    slideIndex++;
-                    renderSlide();
-                }, 800);
+                transitionToSlide(slideIndex + 1);
             } else {
-                // Restart loop
-                slideIndex = 0;
-                contentDiv.classList.remove('active');
-                setTimeout(() => {
-                    renderSlide();
-                }, 800);
+                // Loop back to start (optional) or stay at end
+                 transitionToSlide(0); 
             }
         }
 
-        // Render the current slide based on data
+        function prevSlide() {
+            if (!isStarted || slideIndex === 0) return;
+            transitionToSlide(slideIndex - 1);
+        }
+
+        function transitionToSlide(newIndex) {
+            // Fade out current
+            contentScreen.classList.remove('active');
+            
+            setTimeout(() => {
+                slideIndex = newIndex;
+                renderSlide();
+            }, 600);
+        }
+
+        // --- 4. KEYBOARD CONTROLS ---
+        document.addEventListener('keydown', function(event) {
+            if (!isStarted) return;
+            if (event.key === "ArrowRight") {
+                nextSlide();
+            } else if (event.key === "ArrowLeft") {
+                prevSlide();
+            }
+        });
+
+        // --- 5. RENDER CONTENT ---
         function renderSlide() {
             const slide = data[currentLang][slideIndex];
             
-            // Update Background
-            if(slide.bg) {
+            // Update Background Image
+            if (slide.bg) {
+                // Remove CSS gradients from body to show image
+                document.body.className = ''; 
                 bgDiv.style.backgroundImage = `url('${slide.bg}')`;
+                bgDiv.style.opacity = '1';
             }
 
-            // Build HTML based on slide type
+            // Build HTML
             let html = '';
 
             if (slide.type === 'intro') {
-                // Intro Slide with Photo
                 html = `
                     <img src="avatar.jpg" alt="Umesh Joshi" class="profile-photo">
                     <h1>${slide.title}</h1>
                     <h3>${slide.subtitle}</h3>
                     <p>${slide.text}</p>
                 `;
-            } else if (slide.type === 'title') {
-                // Big Section Title (Experience, Education)
-                html = `<h1>${slide.title}</h1>`;
+            } else if (slide.type === 'section') {
+                // Massive Section Title
+                html = `<div class="section-title"><h1>${slide.title}</h1></div>`;
             } else if (slide.type === 'content') {
-                // Standard Content Slide
                 html = `
                     <h2>${slide.title}</h2>
                     <h4>${slide.role}</h4>
-                    ${slide.isSkills ? generateSkills(slide.skills) : `<p>${slide.details}</p>`}
+                    ${slide.isSkills ? `<div class="skills-grid">${slide.skills.map(s => `<span class="skills-tag">${s}</span>`).join('')}</div>` : `<p>${slide.details}</p>`}
                 `;
             } else if (slide.type === 'end') {
-                // Contact Slide
                 html = `
                     <h1>${slide.title}</h1>
                     <h3>${slide.subtitle}</h3>
-                    <div class="contact-links" style="margin-top: 2rem;">
-                        <a href="mailto:studentumeshjoshi@gmail.com">Email</a>
-                        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
-                        <a href="https://xing.com" target="_blank">XING</a>
-                        <a href="https://indeed.com" target="_blank">Indeed</a>
-                        <a href="https://stepstone.de" target="_blank">Stepstone</a>
+                    <div style="margin-top:2rem; display:flex; gap:15px; justify-content:center;">
+                        <a href="mailto:studentumeshjoshi@gmail.com" class="skills-tag" style="text-decoration:none; color:white;">Email</a>
+                        <a href="https://linkedin.com" target="_blank" class="skills-tag" style="text-decoration:none; color:white;">LinkedIn</a>
+                        <a href="https://xing.com" target="_blank" class="skills-tag" style="text-decoration:none; color:white;">XING</a>
                     </div>
-                    <p style="margin-top: 3rem; font-size: 0.8rem; opacity: 0.7;">
-                        ${currentLang === 'en' ? 'Click Next to restart' : 'Klicken Sie auf Weiter, um neu zu starten'}
-                    </p>
                 `;
             }
 
-            contentDiv.innerHTML = html;
-            contentDiv.classList.add('active');
+            contentScreen.innerHTML = html;
+            
+            // Small delay to trigger CSS transition 'in'
+            requestAnimationFrame(() => {
+                contentScreen.classList.add('active');
+            });
         }
-
-        // Helper to generate skill tags
-        function generateSkills(skillsArray) {
-            return skillsArray.map(skill => `<span class="skills-tag">${skill}</span>`).join('');
-        }
-
-        // Initialize
-        loadLanguageScreen();
-
     </script>
 </body>
 </html>
