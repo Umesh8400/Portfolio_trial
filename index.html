@@ -1,241 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Umesh Joshi | Engineering Portfolio</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Umesh Joshi | Engineering Portfolio</title>
+    <meta name="description" content="Portfolio of Umesh Joshi - Renewable Energies & E-Mobility Engineer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & BASICS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #020617;
+            color: #e5e7eb;
+            overflow: hidden; /* Prevents scrolling */
+            height: 100vh;
+            width: 100vw;
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:Inter,system-ui;
-  background:#020617;
-  color:#e5e7eb;
-  overflow:hidden;
-}
+        /* --- SLIDE CONTAINER --- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden; /* Hides it from screen readers/clicks */
+            transform: translateY(20px); /* Slight slide-up effect */
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+            padding: 20px;
+            pointer-events: none; /* Prevents clicking on hidden slides */
+        }
 
-/* ---------- SLIDES ---------- */
-.slide{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  text-align:center;
-  opacity:0;
-  transform:translateX(60px);
-  transition:opacity .8s ease, transform .8s ease;
-  padding:40px;
-}
-.slide.active{opacity:1;transform:none}
-.slide.prev{opacity:0;transform:translateX(-60px)}
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto; /* Re-enables clicks */
+            z-index: 10;
+        }
 
-/* ---------- NAV ---------- */
-.nav{
-  position:absolute;
-  bottom:30px;
-  font-size:13px;
-  letter-spacing:2px;
-  color:#94a3b8;
-  animation:pulse 1.6s infinite;
-}
-.next{right:40px}
-.back{left:40px}
+        /* --- NAVIGATION ARROWS --- */
+        .nav-btn {
+            position: absolute;
+            bottom: 40px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            transition: color 0.3s, transform 0.3s;
+            z-index: 20;
+            user-select: none;
+        }
+        .nav-btn:hover { color: #38bdf8; transform: scale(1.05); }
+        .next { right: 30px; }
+        .back { left: 30px; }
 
-@keyframes pulse{
-  0%{opacity:.4}
-  50%{opacity:1}
-  100%{opacity:.4}
-}
+        /* --- TYPOGRAPHY --- */
+        .big { font-size: clamp(32px, 5vw, 80px); font-weight: 800; line-height: 1.1; }
+        .text { max-width: 800px; margin-top: 20px; line-height: 1.6; color: #cbd5f5; font-size: clamp(16px, 2vw, 20px); }
+        .section-title { font-size: clamp(40px, 6vw, 100px); font-weight: 800; letter-spacing: 4px; color: #14b8a6; opacity: 0.8; }
 
-/* ---------- TYPO ---------- */
-.big{font-size:clamp(40px,6vw,90px);font-weight:800}
-.medium{font-size:clamp(22px,3vw,36px);margin-top:20px}
-.text{max-width:900px;margin-top:30px;line-height:1.7;color:#cbd5f5}
-.section{font-size:clamp(60px,7vw,120px);font-weight:800;letter-spacing:6px;color:#14b8a6}
+        /* --- INFO BOX --- */
+        .box {
+            border: 1px solid #1e293b;
+            background: rgba(2, 6, 23, 0.8);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .box h3 { font-size: 1.5rem; margin-bottom: 5px; color: #f3f4f6; }
+        .box p { color: #14b8a6; margin-bottom: 15px; font-weight: 600; font-size: 0.9rem; }
+        .box ul { list-style-position: inside; color: #cbd5f5; }
+        .box li { margin-bottom: 8px; line-height: 1.5; }
 
-/* ---------- BOX ---------- */
-.box{
-  border:1px solid #1e293b;
-  padding:32px;
-  border-radius:22px;
-  max-width:900px;
-  text-align:left;
-}
-.box h3{font-size:26px;margin-bottom:10px}
-.box p{color:#94a3b8;margin-bottom:14px}
-.box li{margin-bottom:10px}
+        /* --- BUTTONS --- */
+        .btn-container { margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        button.lang-btn {
+            background: linear-gradient(90deg, #14b8a6, #38bdf8);
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #020617;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button.lang-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(20, 184, 166, 0.3); }
 
-/* ---------- BUTTONS ---------- */
-.btns{margin-top:40px;display:flex;gap:20px}
-button{
-  background:linear-gradient(90deg,#14b8a6,#38bdf8);
-  border:none;
-  padding:14px 34px;
-  border-radius:30px;
-  font-weight:700;
-  cursor:pointer;
-  color:#020617;
-}
+        /* --- INTRO CIRCLE ANIMATION --- */
+        .circle-container {
+            position: relative;
+            width: 300px; height: 300px;
+        }
+        .circle-word {
+            position: absolute;
+            font-weight: 600;
+            color: #64748b;
+            transition: color 0.3s;
+        }
+        .main-hello {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 800;
+            color: #e5e7eb;
+            z-index: 2;
+        }
 
-/* ---------- INTRO CIRCLE ---------- */
-.circle{
-  position:relative;
-  width:300px;height:300px;
-}
-.circle span{
-  position:absolute;
-  font-weight:600;
-  color:#94a3b8;
-}
-.center{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:64px;
-  font-weight:800;
-  color:#e5e7eb;
-}
-
-/* ---------- DAY / NIGHT ---------- */
-.day{
-  background:radial-gradient(circle at top,#fde68a,#60a5fa,#020617);
-}
-.night{
-  background:radial-gradient(circle at top,#1e293b,#020617);
-}
-</style>
+        /* --- BACKGROUND THEMES --- */
+        .bg-day { background: radial-gradient(circle at 50% 10%, #1e293b, #0f172a, #020617); }
+        .bg-night { background: radial-gradient(circle at 50% 10%, #0f172a, #020617); }
+    </style>
 </head>
 
-<body>
+<body id="bodyBg">
 
-<!-- SLIDE 0 : HELLO -->
-<section class="slide active" id="introSlide">
-  <div class="circle">
-    <div class="center">HALLO</div>
-    <span style="top:0;left:50%">Hello</span>
-    <span style="right:0;top:50%">Hola</span>
-    <span style="bottom:0;left:50%">Bonjour</span>
-    <span style="left:0;top:50%">你好</span>
-    <span style="top:20%;left:10%">नमस्ते</span>
-    <span style="bottom:20%;right:10%">नमस्कार</span>
-  </div>
-  <div class="nav next">NEXT →</div>
-</section>
+    <section class="slide active">
+        <div class="circle-container">
+            <div class="main-hello">HALLO</div>
+            <span class="circle-word" style="top:0; left:50%; transform:translateX(-50%)">Hello</span>
+            <span class="circle-word" style="bottom:0; left:50%; transform:translateX(-50%)">Bonjour</span>
+            <span class="circle-word" style="left:0; top:50%; transform:translateY(-50%)">你好</span>
+            <span class="circle-word" style="right:0; top:50%; transform:translateY(-50%)">Hola</span>
+            <span class="circle-word" style="top:20%; left:10%">नमस्ते</span>
+            <span class="circle-word" style="bottom:20%; right:10%">नमस्कार</span>
+        </div>
+        <div class="nav-btn next" onclick="nextSlide()">START →</div>
+    </section>
 
-<!-- SLIDE 1 : LANGUAGE -->
-<section class="slide">
-  <div class="big">Choose Language</div>
-  <div class="btns">
-    <button onclick="setLang('en')">English</button>
-    <button onclick="setLang('de')">Deutsch</button>
-  </div>
-</section>
+    <section class="slide">
+        <div class="big">Choose Language</div>
+        <div class="btn-container">
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+            <button class="lang-btn" onclick="setLang('de')">Deutsch</button>
+        </div>
+    </section>
 
-<!-- SLIDE 2 : INTRO -->
-<section class="slide">
-  <div class="big" id="title"></div>
-  <div class="text" id="summary"></div>
-  <div class="nav back">← BACK</div>
-  <div class="nav next">NEXT →</div>
-</section>
+    <section class="slide">
+        <div class="big" id="title"></div>
+        <div class="text" id="summary"></div>
+        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
+        <div class="nav-btn next" onclick="nextSlide()">NEXT →</div>
+    </section>
 
-<!-- SLIDE 3 -->
-<section class="slide">
-  <div class="section" id="expTitle"></div>
-</section>
+    <section class="slide">
+        <div class="section-title" id="expTitle"></div>
+    </section>
 
-<!-- SLIDE 4 -->
-<section class="slide">
-  <div class="box" id="exp1"></div>
-  <div class="nav back">← BACK</div>
-  <div class="nav next">NEXT →</div>
-</section>
+    <section class="slide">
+        <div class="box" id="exp1"></div>
+        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
+        <div class="nav-btn next" onclick="nextSlide()">NEXT →</div>
+    </section>
 
-<!-- SLIDE 5 -->
-<section class="slide">
-  <div class="section" id="eduTitle"></div>
-</section>
+    <section class="slide">
+        <div class="section-title" id="eduTitle"></div>
+    </section>
 
-<!-- SLIDE 6 -->
-<section class="slide">
-  <div class="big" id="thanks"></div>
-</section>
+    <section class="slide">
+        <div class="big" id="thanks"></div>
+        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
+    </section>
 
 <script>
-const slides=document.querySelectorAll('.slide');
-let current=0;
-let lang=null;
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    
+    // Day/Night Logic based on hour
+    const hour = new Date().getHours();
+    const isDay = hour >= 6 && hour < 18;
+    document.getElementById('bodyBg').classList.add(isDay ? 'bg-day' : 'bg-night');
 
-/* -------- DAY / NIGHT -------- */
-const h=new Date().getHours();
-document.getElementById('introSlide').classList.add(h>=6&&h<18?'day':'night');
+    // Navigation Functions
+    function updateSlides() {
+        slides.forEach((slide, index) => {
+            if(index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+    }
 
-/* -------- CONTENT -------- */
-const TEXT={
-  en:{
-    title:'Hello, I am Umesh Joshi',
-    summary:'I am a Master’s student in Renewable Energies and E-Mobility with industrial experience in battery development, modeling, testing, and validation within the automotive sector.',
-    expTitle:'EXPERIENCE',
-    eduTitle:'EDUCATION',
-    exp1:`<h3>Working Student – Battery Development</h3>
-          <p>Mercedes-Benz AG · Stuttgart</p>
-          <ul>
-            <li>Battery voltage relaxation modeling for ML frameworks</li>
-            <li>Anomaly datasets from experimental battery data</li>
-          </ul>`,
-    thanks:'Thank you for visiting my portfolio'
-  },
-  de:{
-    title:'Hallo, ich bin Umesh Joshi',
-    summary:'Ich bin Masterstudent im Bereich Erneuerbare Energien und E-Mobility mit industrieller Erfahrung in der Batterieentwicklung, Modellierung, Prüfung und Validierung.',
-    expTitle:'BERUFSERFAHRUNG',
-    eduTitle:'AUSBILDUNG',
-    exp1:`<h3>Werkstudent – Batterieentwicklung</h3>
-          <p>Mercedes-Benz AG · Stuttgart</p>
-          <ul>
-            <li>Spannungsrelaxationsmodelle für ML-Anwendungen</li>
-            <li>Anomalie-Datensätze aus Batteriemessungen</li>
-          </ul>`,
-    thanks:'Vielen Dank für Ihren Besuch'
-  }
-};
+    function nextSlide() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            updateSlides();
+        }
+    }
 
-/* -------- NAV -------- */
-function show(n){
-  if(n<0||n>=slides.length)return;
-  slides[current].classList.remove('active');
-  slides[current].classList.add('prev');
-  current=n;
-  slides[current].classList.add('active');
-}
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlides();
+        }
+    }
 
-document.addEventListener('click',e=>{
-  if(e.target.closest('button'))return;
-  show(current+1);
-});
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
 
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight')show(current+1);
-  if(e.key==='ArrowLeft')show(current-1);
-});
+    // Content Data
+    const CONTENT = {
+        en: {
+            title: 'Hello, I am Umesh Joshi',
+            summary: 'I am a Master’s student in Renewable Energies and E-Mobility with industrial experience in battery development, modeling, testing, and validation within the automotive sector.',
+            expTitle: 'EXPERIENCE',
+            eduTitle: 'EDUCATION',
+            exp1: `<h3>Working Student – Battery Development</h3>
+                   <p>Mercedes-Benz AG · Stuttgart</p>
+                   <ul>
+                     <li>Battery voltage relaxation modeling for ML frameworks.</li>
+                     <li>Analysis of anomaly datasets from experimental battery data.</li>
+                   </ul>`,
+            thanks: 'Thank you for visiting.'
+        },
+        de: {
+            title: 'Hallo, ich bin Umesh Joshi',
+            summary: 'Ich bin Masterstudent im Bereich Erneuerbare Energien und E-Mobility mit industrieller Erfahrung in der Batterieentwicklung, Modellierung, Prüfung und Validierung.',
+            expTitle: 'BERUFSERFAHRUNG',
+            eduTitle: 'AUSBILDUNG',
+            exp1: `<h3>Werkstudent – Batterieentwicklung</h3>
+                   <p>Mercedes-Benz AG · Stuttgart</p>
+                   <ul>
+                     <li>Spannungsrelaxationsmodelle für ML-Anwendungen.</li>
+                     <li>Analyse von Anomalie-Datensätzen aus Batteriemessungen.</li>
+                   </ul>`,
+            thanks: 'Vielen Dank für Ihren Besuch.'
+        }
+    };
 
-function setLang(l){
-  lang=l;
-  const t=TEXT[l];
-  title.innerHTML=t.title;
-  summary.innerHTML=t.summary;
-  expTitle.innerHTML=t.expTitle;
-  eduTitle.innerHTML=t.eduTitle;
-  exp1.innerHTML=t.exp1;
-  thanks.innerHTML=t.thanks;
-  show(2);
-}
+    // Language Setter
+    function setLang(lang) {
+        const text = CONTENT[lang];
+        document.getElementById('title').innerHTML = text.title;
+        document.getElementById('summary').innerHTML = text.summary;
+        document.getElementById('expTitle').innerHTML = text.expTitle;
+        document.getElementById('eduTitle').innerHTML = text.eduTitle;
+        document.getElementById('exp1').innerHTML = text.exp1;
+        document.getElementById('thanks').innerHTML = text.thanks;
+        
+        // Auto-advance after selection
+        nextSlide();
+    }
 </script>
 
 </body>
