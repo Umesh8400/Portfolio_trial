@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Umesh Joshi — Battery Engineer Portfolio</title>
+  <meta name="description" content="Umesh Joshi | Battery Development, Modelling & Validation | Bilingual Portfolio (EN/DE)" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#020617;
+      --card:#020617;
+      --accent:#14b8a6;
+      --accent-2:#38bdf8;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --radius:18px;
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;color:var(--text);background:radial-gradient(1200px 600px at 10% -10%,#0f766e22,transparent),radial-gradient(800px 400px at 90% 10%,#0284c722,transparent),var(--bg)}
+
+    a{text-decoration:none;color:var(--accent)}
+
+    .container{max-width:var(--max-width);margin:auto;padding:40px 24px}
+
+    /* ================= HERO ================= */
+    header{display:grid;grid-template-columns:160px 1fr auto;gap:24px;align-items:center}
+    @media(max-width:900px){header{grid-template-columns:120px 1fr}}
+
+    .avatar{width:160px;height:160px;border-radius:22px;overflow:hidden;box-shadow:0 20px 50px #0008}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+
+    .hero-title{font-size:34px;font-weight:800;margin:6px 0}
+    .hero-sub{color:var(--muted);max-width:720px}
+
+    .lang-switch button{background:#0f172a;border:1px solid #1e293b;color:var(--text);padding:8px 14px;border-radius:999px;margin-left:6px;cursor:pointer;font-weight:600}
+    .lang-switch .active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#020617}
+
+    /* ================= SECTION ================= */
+    section{margin-top:70px}
+    .section-label{display:inline-block;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.08em;background:#0f172a;color:var(--accent);margin-bottom:20px}
+
+    /* ================= LOOP TIMELINE ================= */
+    .loop{display:grid;gap:26px;position:relative}
+    .loop:before{content:"";position:absolute;left:44px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--accent),transparent)}
+
+    .item{display:grid;grid-template-columns:90px 1fr;gap:24px}
+    .item img{width:90px;height:90px;border-radius:14px;object-fit:cover;border:1px solid #1e293b}
+    .item h3{margin:0;font-size:18px}
+    .meta{font-size:13px;color:var(--muted);margin:6px 0}
+    .bullets{font-size:15px;line-height:1.6}
+
+    /* ================= SKILLS ================= */
+    .skills{display:flex;flex-wrap:wrap;gap:10px}
+    .skill{padding:8px 12px;border-radius:999px;background:#0f172a;font-weight:600;font-size:13px}
+
+    /* ================= SIDEBAR ================= */
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:40px}
+    @media(max-width:1000px){.grid{grid-template-columns:1fr}}
+
+    aside{position:sticky;top:40px}
+    .card{background:#020617;border:1px solid #1e293b;border-radius:var(--radius);padding:18px;margin-bottom:18px}
+
+    footer{text-align:center;color:var(--muted);margin-top:80px;font-size:14px}
+
+    /* ================= ANIMATION ================= */
+    .fade{opacity:0;transform:translateY(20px);animation:fade .9s forwards}
+    @keyframes fade{to{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <header class="fade">
+    <div class="avatar">
+      <!-- replace with your photo -->
+      <img src="assets/avatar.jpg" alt="Umesh Joshi portrait">
+    </div>
+    <div>
+      <div id="greeting" class="section-label">Hello</div>
+      <div class="hero-title">Umesh Yadneshwar Joshi</div>
+      <div class="hero-sub" id="intro">Master Student — Renewable Energies & E‑Mobility | Battery Development, Modelling & Validation</div>
+    </div>
+    <div class="lang-switch">
+      <button id="en" class="active">EN</button>
+      <button id="de">DE</button>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- EXPERIENCE -->
+      <section>
+        <div class="section-label" id="expTitle">EXPERIENCE</div>
+        <div class="loop" id="experience"></div>
+      </section>
+
+      <!-- EDUCATION -->
+      <section>
+        <div class="section-label" id="eduTitle">EDUCATION</div>
+        <div class="loop" id="education"></div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section>
+        <div class="section-label" id="projTitle">PROJECTS</div>
+        <div class="loop" id="projects"></div>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="card">
+        <h3>Skills</h3>
+        <div class="skills" id="skills"></div>
+      </div>
+
+      <div class="card">
+        <h3 id="langTitle">Languages</h3>
+        <div id="languages" class="meta"></div>
+      </div>
+
+      <div class="card">
+        <h3 id="contactTitle">Contact</h3>
+        <p class="meta">
+          <a href="mailto:studentumeshjoshi@gmail.com">Email</a><br>
+          <a href="https://www.linkedin.com/in/umesh-joshi-689661185/" target="_blank">LinkedIn</a><br>
+          <a href="https://www.xing.com/profile/Umesh_Joshi5" target="_blank">Xing</a>
+        </p>
+        <p class="meta">Driving License: India ✔ | Germany (in progress)</p>
+      </div>
+
+      <div class="card">
+        <h3>Achievement</h3>
+        <p class="meta">🥈 Second Rank — Bachelor of Engineering</p>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer>
+    <p id="thanks">Thank you for visiting my portfolio.</p>
+  </footer>
+
+</div>
+
+<script>
+const DATA={
+  en:{
+    greeting:h=>h<12?'Good Morning':h<18?'Good Afternoon':'Good Evening',
+    intro:'Master Student — Renewable Energies & E‑Mobility | Battery Development, Modelling & Validation',
+    expTitle:'EXPERIENCE',eduTitle:'EDUCATION',projTitle:'PROJECTS',langTitle:'Languages',contactTitle:'Contact',thanks:'Thank you for visiting my portfolio.',
+    experience:[
+      {img:'assets/battery.jpg',title:'Working Student — Battery Development & Algorithms',meta:'Mercedes‑Benz AG | 08.2025 – 01.2026',bullets:['Voltage relaxation modelling for ML frameworks','Creation of anomaly datasets from experimental battery data']},
+      {img:'assets/model.jpg',title:'Master Thesis — Voltage Relaxation Modelling (Grade 1.0)',meta:'Mercedes‑Benz AG | 12.2024 – 07.2025',bullets:['Advanced Python-based battery models','Accuracy improvement ~80–85% using adaptive optimization']},
+      {img:'assets/simulation.jpg',title:'Working Student — HV Battery System Development',meta:'Mercedes‑Benz AG | 02.2024 – 11.2024',bullets:['MATLAB automation (−95% manual effort)','3D simulations & impedance measurements']},
+      {img:'assets/testbench.jpg',title:'Working Student — Battery Testing & Validation',meta:'ElringKlinger AG | 11.2023 – 01.2024',bullets:['Battery component testing','Analysis with DIAdem & X‑Frame']}
+    ],
+    education:[
+      {img:'assets/uni.jpg',title:'M.Sc. Renewable Energies & E‑Mobility',meta:'Hochschule Stralsund | 2022 – 2025'},
+      {img:'assets/uni.jpg',title:'B.E. Electrical Engineering (1.3)',meta:'University of Mumbai | 2018 – 2021'},
+      {img:'assets/diploma.jpg',title:'Diploma Electrical Engineering (1.9)',meta:'MSBTE Mumbai | 2015 – 2018'}
+    ],
+    projects:[
+      {img:'assets/railgun.jpg',title:'Bachelor Thesis — Electromagnetic Railgun',meta:'IJERT Publication',bullets:['Linear electromagnetic launcher','High acceleration, low erosion']},
+      {img:'assets/arduino.jpg',title:'Diploma Project — DC Motor Speed Control',meta:'Arduino PWM',bullets:['IGBT based PWM control','Stable speed regulation']}
+    ],
+    skills:['MATLAB','Python','Simulink','Machine Learning','C','AUTOSAR','CST Studio','DIAdem'],
+    languages:['German — B2 (ongoing)','English — C1','Marathi — Native','Hindi — Professional']
+  },
+  de:{
+    greeting:h=>h<12?'Guten Morgen':h<18?'Guten Tag':'Guten Abend',
+    intro:'Masterstudent — Erneuerbare Energien & E‑Mobility | Batterieentwicklung, Modellierung & Validierung',
+    expTitle:'BERUFSERFAHRUNG',eduTitle:'AUSBILDUNG',projTitle:'PROJEKTE',langTitle:'Sprachen',contactTitle:'Kontakt',thanks:'Vielen Dank für Ihren Besuch.',
+    experience:[
+      {img:'assets/battery.jpg',title:'Werkstudent — Batterieentwicklung & Algorithmen',meta:'Mercedes‑Benz AG | 08.2025 – 01.2026',bullets:['Spannungsrelaxationsmodelle für ML','Anomalie‑Datensätze aus Batteriemessungen']},
+      {img:'assets/model.jpg',title:'Masterarbeit — Spannungsrelaxation (Note 1.0)',meta:'Mercedes‑Benz AG | 12.2024 – 07.2025',bullets:['Python‑basierte Batteriemodelle','Genauigkeitssteigerung um ~85%']},
+      {img:'assets/simulation.jpg',title:'Werkstudent — HV Batteriesysteme',meta:'Mercedes‑Benz AG | 02.2024 – 11.2024',bullets:['MATLAB‑Automatisierung','3D‑Simulationen & Impedanzmessungen']},
+      {img:'assets/testbench.jpg',title:'Werkstudent — Batterietests & Validierung',meta:'ElringKlinger AG | 11.2023 – 01.2024',bullets:['Batterieprüfungen','Auswertung mit DIAdem']}
+    ],
+    education:[
+      {img:'assets/uni.jpg',title:'Master Erneuerbare Energien & E‑Mobility',meta:'Hochschule Stralsund | 2022 – 2025'},
+      {img:'assets/uni.jpg',title:'Bachelor Elektrotechnik (1.3)',meta:'University of Mumbai | 2018 – 2021'},
+      {img:'assets/diploma.jpg',title:'Diplom Elektrotechnik (1.9)',meta:'MSBTE Mumbai | 2015 – 2018'}
+    ],
+    projects:[
+      {img:'assets/railgun.jpg',title:'Bachelorarbeit — Elektromagnetische Railgun',meta:'IJERT',bullets:['Linearbeschleuniger','Hohe Effizienz']},
+      {img:'assets/arduino.jpg',title:'Diplomprojekt — DC‑Motorregelung',meta:'Arduino PWM',bullets:['PWM‑Regelung','Konstante Drehzahl']}
+    ],
+    skills:['MATLAB','Python','Simulink','Machine Learning','C','AUTOSAR','CST Studio','DIAdem'],
+    languages:['Deutsch — B2 (laufend)','Englisch — C1','Marathi — Muttersprache','Hindi — Beruflich']
+  }
+};
+
+function render(lang){
+  const d=DATA[lang];
+  document.getElementById('greeting').textContent=d.greeting(new Date().getHours());
+  document.getElementById('intro').textContent=d.intro;
+  document.getElementById('expTitle').textContent=d.expTitle;
+  document.getElementById('eduTitle').textContent=d.eduTitle;
+  document.getElementById('projTitle').textContent=d.projTitle;
+  document.getElementById('langTitle').textContent=d.langTitle;
+  document.getElementById('contactTitle').textContent=d.contactTitle;
+  document.getElementById('thanks').textContent=d.thanks;
+
+  fill('experience',d.experience,true);
+  fill('education',d.education,false);
+  fill('projects',d.projects,true);
+
+  document.getElementById('skills').innerHTML=d.skills.map(s=>`<span class='skill'>${s}</span>`).join('');
+  document.getElementById('languages').innerHTML=d.languages.join('<br>');
+
+  document.getElementById('en').classList.toggle('active',lang==='en');
+  document.getElementById('de').classList.toggle('active',lang==='de');
+}
+
+function fill(id,arr,bul){
+  const c=document.getElementById(id);c.innerHTML='';
+  arr.forEach(i=>{
+    c.innerHTML+=`<div class='item fade'><img src='${i.img}'><div><h3>${i.title}</h3><div class='meta'>${i.meta}</div>${bul&&i.bullets?`<div class='bullets'>${i.bullets.map(b=>'• '+b).join('<br>')}</div>`:''}</div></div>`;
+  });
+}
+
+render('en');
+document.getElementById('en').onclick=()=>render('en');
+document.getElementById('de').onclick=()=>render('de');
+</script>
+</body>
+</html>
