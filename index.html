@@ -2,267 +2,416 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Umesh Joshi | Engineering Portfolio</title>
-    <meta name="description" content="Portfolio of Umesh Joshi - Renewable Energies & E-Mobility Engineer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
+    <title>Umesh Joshi | Portfolio</title>
     <style>
-        /* --- RESET & BASICS --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #020617;
-            color: #e5e7eb;
-            overflow: hidden; /* Prevents scrolling */
-            height: 100vh;
-            width: 100vw;
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #3498db; /* Professional Blue */
+            --dark: #0f172a;    /* Deep Navy/Black */
+            --light: #f8fafc;   /* Off-white */
+            --overlay: rgba(15, 23, 42, 0.85); /* Dark overlay for readability */
         }
 
-        /* --- SLIDE CONTAINER --- */
-        .slide {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { background-color: var(--dark); color: var(--light); overflow: hidden; height: 100vh; width: 100vw; }
+
+        /* Background Image container */
+        #bg-image {
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            transition: background-image 1s ease-in-out;
+            filter: blur(2px);
+        }
+        
+        /* Dark overlay to make text readable */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay);
+            z-index: -1;
+        }
+
+        /* Slide Container */
+        .slide-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 2rem;
             text-align: center;
             opacity: 0;
-            visibility: hidden; /* Hides it from screen readers/clicks */
-            transform: translateY(20px); /* Slight slide-up effect */
-            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
-            padding: 20px;
-            pointer-events: none; /* Prevents clicking on hidden slides */
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .slide.active {
+        .slide-container.active {
             opacity: 1;
-            visibility: visible;
             transform: translateY(0);
-            pointer-events: auto; /* Re-enables clicks */
-            z-index: 10;
         }
 
-        /* --- NAVIGATION ARROWS --- */
-        .nav-btn {
+        /* Typography */
+        h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; letter-spacing: -1px; }
+        h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        h4 { font-size: 1.2rem; color: #94a3b8; margin-bottom: 1.5rem; font-style: italic; }
+        p { font-size: 1.1rem; line-height: 1.6; max-width: 800px; margin: 0 auto 1rem auto; }
+        
+        .skills-tag { display: inline-block; background: rgba(52, 152, 219, 0.2); border: 1px solid var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; margin: 5px; }
+
+        /* Buttons */
+        .btn-group { margin-top: 2rem; }
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: 2px solid var(--light);
+            background: transparent;
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: var(--light); color: var(--dark); }
+
+        /* Flashing Next Button */
+        .next-btn-container {
             position: absolute;
             bottom: 40px;
-            font-size: 14px;
-            letter-spacing: 2px;
-            font-weight: 700;
-            color: #94a3b8;
+            right: 40px;
             cursor: pointer;
-            text-transform: uppercase;
-            padding: 10px 20px;
-            transition: color 0.3s, transform 0.3s;
-            z-index: 20;
-            user-select: none;
+            display: none; /* Hidden on language selection */
+            z-index: 10;
         }
-        .nav-btn:hover { color: #38bdf8; transform: scale(1.05); }
-        .next { right: 30px; }
-        .back { left: 30px; }
-
-        /* --- TYPOGRAPHY --- */
-        .big { font-size: clamp(32px, 5vw, 80px); font-weight: 800; line-height: 1.1; }
-        .text { max-width: 800px; margin-top: 20px; line-height: 1.6; color: #cbd5f5; font-size: clamp(16px, 2vw, 20px); }
-        .section-title { font-size: clamp(40px, 6vw, 100px); font-weight: 800; letter-spacing: 4px; color: #14b8a6; opacity: 0.8; }
-
-        /* --- INFO BOX --- */
-        .box {
-            border: 1px solid #1e293b;
-            background: rgba(2, 6, 23, 0.8);
-            padding: 30px;
-            border-radius: 16px;
-            max-width: 800px;
-            width: 100%;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .box h3 { font-size: 1.5rem; margin-bottom: 5px; color: #f3f4f6; }
-        .box p { color: #14b8a6; margin-bottom: 15px; font-weight: 600; font-size: 0.9rem; }
-        .box ul { list-style-position: inside; color: #cbd5f5; }
-        .box li { margin-bottom: 8px; line-height: 1.5; }
-
-        /* --- BUTTONS --- */
-        .btn-container { margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        button.lang-btn {
-            background: linear-gradient(90deg, #14b8a6, #38bdf8);
+        
+        .next-btn {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: transparent;
             border: none;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            color: #020617;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        button.lang-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(20, 184, 166, 0.3); }
-
-        /* --- INTRO CIRCLE ANIMATION --- */
-        .circle-container {
-            position: relative;
-            width: 300px; height: 300px;
-        }
-        .circle-word {
-            position: absolute;
-            font-weight: 600;
-            color: #64748b;
-            transition: color 0.3s;
-        }
-        .main-hello {
-            position: absolute;
-            inset: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: clamp(40px, 5vw, 64px);
-            font-weight: 800;
-            color: #e5e7eb;
-            z-index: 2;
+            gap: 10px;
         }
 
-        /* --- BACKGROUND THEMES --- */
-        .bg-day { background: radial-gradient(circle at 50% 10%, #1e293b, #0f172a, #020617); }
-        .bg-night { background: radial-gradient(circle at 50% 10%, #0f172a, #020617); }
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+
+        /* Contact Icons */
+        .contact-links a { color: var(--light); font-size: 1.2rem; margin: 0 15px; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .contact-links a:hover { border-bottom: 1px solid var(--primary); color: var(--primary); }
+
+        /* Profile Photo Styling */
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .next-btn-container { bottom: 20px; right: 20px; }
+        }
     </style>
 </head>
+<body>
 
-<body id="bodyBg">
+    <div id="bg-image"></div>
+    <div class="overlay"></div>
 
-    <section class="slide active">
-        <div class="circle-container">
-            <div class="main-hello">HALLO</div>
-            <span class="circle-word" style="top:0; left:50%; transform:translateX(-50%)">Hello</span>
-            <span class="circle-word" style="bottom:0; left:50%; transform:translateX(-50%)">Bonjour</span>
-            <span class="circle-word" style="left:0; top:50%; transform:translateY(-50%)">你好</span>
-            <span class="circle-word" style="right:0; top:50%; transform:translateY(-50%)">Hola</span>
-            <span class="circle-word" style="top:20%; left:10%">नमस्ते</span>
-            <span class="circle-word" style="bottom:20%; right:10%">नमस्कार</span>
-        </div>
-        <div class="nav-btn next" onclick="nextSlide()">START →</div>
-    </section>
+    <main id="content" class="slide-container active">
+        </main>
 
-    <section class="slide">
-        <div class="big">Choose Language</div>
-        <div class="btn-container">
-            <button class="lang-btn" onclick="setLang('en')">English</button>
-            <button class="lang-btn" onclick="setLang('de')">Deutsch</button>
-        </div>
-    </section>
+    <div class="next-btn-container" id="nextBtn" onclick="nextSlide()">
+        <span id="nextText">NEXT</span> <span>&#10140;</span>
+    </div>
 
-    <section class="slide">
-        <div class="big" id="title"></div>
-        <div class="text" id="summary"></div>
-        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
-        <div class="nav-btn next" onclick="nextSlide()">NEXT →</div>
-    </section>
+    <script>
+        // --- DATA OBJECT (English & German) ---
+        const data = {
+            en: [
+                {
+                    type: "intro",
+                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop", // Tech generic
+                    title: "Hello, I am Umesh Joshi",
+                    subtitle: "M.Eng. Renewable Energies & E-Mobility",
+                    text: "An innovative Electrical Engineer specializing in Battery Development, Algorithms, and System Validation. Currently shaping the future of EV technology.",
+                    photo: true
+                },
+                { type: "title", title: "EXPERIENCE", bg: "https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1920&auto=format&fit=crop" }, // Automotive
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?q=80&w=1920&auto=format&fit=crop", // Data/Charts
+                    title: "Mercedes-Benz AG",
+                    role: "Master Thesis Student (12.2024 - 07.2025)",
+                    details: "Modeling and prediction of voltage relaxation behavior in Li-Ion batteries.<br><br>• Developed advanced Python frameworks for relaxation models.<br>• Improved model accuracy by 80-85% using adaptive optimization.<br>• Enhanced SOC estimation for reliable battery performance."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?q=80&w=1920&auto=format&fit=crop", // Simulation
+                    title: "Mercedes-Benz AG",
+                    role: "Working Student - HV Battery Development (02.2024 - 11.2024)",
+                    details: "System Pre-development.<br><br>• Automated data analysis with MATLAB, reducing manual effort by 95-98%.<br>• Setup 3D simulation models in CST-Studio Suite.<br>• Conducted impedance measurements."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1920&auto=format&fit=crop", // Hardware/Testing
+                    title: "ElringKlinger AG",
+                    role: "Working Student & Intern (05.2023 - 01.2024)",
+                    details: "Battery System Tests and Validation.<br><br>• Validated battery systems, ECUs, and drives for safety standards.<br>• Analyzed measurement results using X-Frame and DIAdem.<br>• Hardware design support for microcontrollers."
+                },
+                { type: "title", title: "EDUCATION", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop" }, // University
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1920&auto=format&fit=crop", // Study
+                    title: "Hochschule Stralsund",
+                    role: "Master in Renewable Energies & E-Mobility",
+                    details: "Focus: Vehicle Management Systems, Simulation, System Theory, Hydrogen Technology, Electric Drives Control."
+                },
+                {
+                    type: "content",
+                    bg: "",
+                    title: "University of Mumbai",
+                    role: "Bachelor of Engineering - Electrical Engineering",
+                    details: "Grade: 1.3 | Second Place Award<br>Projects: Electromagnetic Space Shuttle Launch System."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920&auto=format&fit=crop", // Dashboard
+                    title: "Technical Skills",
+                    role: "Software & Tools",
+                    isSkills: true,
+                    skills: ["MATLAB/Simulink", "Python", "Machine Learning (AI/ML)", "CANoe/CANalyzer", "PREEvision", "LT Spice", "GitHub"]
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1920&auto=format&fit=crop", // Driving
+                    title: "Additional Info",
+                    role: "Languages & Driving",
+                    details: "• <strong>Languages:</strong> English (C1), German (B2.1), Marathi/Hindi (Native)<br>• <strong>Driving License:</strong> Indian License held, German License in process."
+                },
+                {
+                    type: "end",
+                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1920&auto=format&fit=crop", // Typing
+                    title: "Thank You",
+                    subtitle: "Let's Connect",
+                    links: true
+                }
+            ],
+            de: [
+                {
+                    type: "intro",
+                    bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop",
+                    title: "Hallo, ich bin Umesh Joshi",
+                    subtitle: "M.Eng. Erneuerbare Energien & E-Mobilität",
+                    text: "Ein innovativer Elektroingenieur spezialisiert auf Batterieentwicklung, Algorithmen und Systemvalidierung. Ich gestalte die Zukunft der E-Mobilität.",
+                    photo: true
+                },
+                { type: "title", title: "BERUFSERFAHRUNG", bg: "https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1920&auto=format&fit=crop" },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?q=80&w=1920&auto=format&fit=crop",
+                    title: "Mercedes-Benz AG",
+                    role: "Masterarbeit (12.2024 - 07.2025)",
+                    details: "Modellierung und Vorhersage des Spannungsrelaxationsverhaltens in Li-Ionen-Batterien.<br><br>• Entwicklung moderner Python-Frameworks für Relaxationsmodelle.<br>• Verbesserung der Modellgenauigkeit um 80-85% durch adaptive Optimierung.<br>• Deutliche Verbesserung der SOC-Schätzgenauigkeit."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1531297461136-82lw9z28f91?q=80&w=1920&auto=format&fit=crop",
+                    title: "Mercedes-Benz AG",
+                    role: "Werkstudent - HV Batterieentwicklung (02.2024 - 11.2024)",
+                    details: "Systemvorentwicklung.<br><br>• Automatisierte Analyse mit MATLAB (95-98% Zeitersparnis).<br>• Aufbau von 3D-Simulationsmodellen in CST-Studio Suite.<br>• Durchführung von Impedanzmessungen."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1920&auto=format&fit=crop",
+                    title: "ElringKlinger AG",
+                    role: "Werkstudent & Praktikant (05.2023 - 01.2024)",
+                    details: "Batteriesystemtests und Validierung.<br><br>• Testen von Batteriekomponenten und -zellen.<br>• Auswertung von Messergebnissen mit X-Frame und DIAdem.<br>• Mitarbeit am Hardware-Design von ECUs."
+                },
+                { type: "title", title: "AUSBILDUNG", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop" },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1920&auto=format&fit=crop",
+                    title: "Hochschule Stralsund",
+                    role: "Master in Erneuerbare Energien und E-Mobilität",
+                    details: "Schwerpunkte: Fahrzeugsimulation, Systemtheorie, Wasserstofftechnologie, Steuerung elektrischer Antriebe."
+                },
+                {
+                    type: "content",
+                    bg: "",
+                    title: "University of Mumbai",
+                    role: "Bachelor of Engineering - Elektrotechnik",
+                    details: "Note: 1.3 | Auszeichnung für den 2. Platz<br>Projekte: Elektromagnetisches Space Shuttle Startsystem."
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920&auto=format&fit=crop",
+                    title: "Kenntnisse",
+                    role: "Software & Tools",
+                    isSkills: true,
+                    skills: ["MATLAB/Simulink", "Python", "Machine Learning (AI/ML)", "CANoe/CANalyzer", "PREEvision", "LT Spice", "GitHub"]
+                },
+                {
+                    type: "content",
+                    bg: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1920&auto=format&fit=crop",
+                    title: "Sonstiges",
+                    role: "Sprachen & Führerschein",
+                    details: "• <strong>Sprachen:</strong> Englisch (C1), Deutsch (B2.1), Marathi/Hindi (Muttersprache)<br>• <strong>Führerschein:</strong> Indischer Führerschein vorhanden, deutscher Führerschein in Bearbeitung."
+                },
+                {
+                    type: "end",
+                    bg: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1920&auto=format&fit=crop",
+                    title: "Vielen Dank",
+                    subtitle: "Kontaktieren Sie mich",
+                    links: true
+                }
+            ]
+        };
 
-    <section class="slide">
-        <div class="section-title" id="expTitle"></div>
-    </section>
-
-    <section class="slide">
-        <div class="box" id="exp1"></div>
-        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
-        <div class="nav-btn next" onclick="nextSlide()">NEXT →</div>
-    </section>
-
-    <section class="slide">
-        <div class="section-title" id="eduTitle"></div>
-    </section>
-
-    <section class="slide">
-        <div class="big" id="thanks"></div>
-        <div class="nav-btn back" onclick="prevSlide()">← BACK</div>
-    </section>
-
-<script>
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-    
-    // Day/Night Logic based on hour
-    const hour = new Date().getHours();
-    const isDay = hour >= 6 && hour < 18;
-    document.getElementById('bodyBg').classList.add(isDay ? 'bg-day' : 'bg-night');
-
-    // Navigation Functions
-    function updateSlides() {
-        slides.forEach((slide, index) => {
-            if(index === currentSlide) {
-                slide.classList.add('active');
-            } else {
-                slide.classList.remove('active');
-            }
-        });
-    }
-
-    function nextSlide() {
-        if (currentSlide < slides.length - 1) {
-            currentSlide++;
-            updateSlides();
-        }
-    }
-
-    function prevSlide() {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateSlides();
-        }
-    }
-
-    // Keyboard Navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') nextSlide();
-        if (e.key === 'ArrowLeft') prevSlide();
-    });
-
-    // Content Data
-    const CONTENT = {
-        en: {
-            title: 'Hello, I am Umesh Joshi',
-            summary: 'I am a Master’s student in Renewable Energies and E-Mobility with industrial experience in battery development, modeling, testing, and validation within the automotive sector.',
-            expTitle: 'EXPERIENCE',
-            eduTitle: 'EDUCATION',
-            exp1: `<h3>Working Student – Battery Development</h3>
-                   <p>Mercedes-Benz AG · Stuttgart</p>
-                   <ul>
-                     <li>Battery voltage relaxation modeling for ML frameworks.</li>
-                     <li>Analysis of anomaly datasets from experimental battery data.</li>
-                   </ul>`,
-            thanks: 'Thank you for visiting.'
-        },
-        de: {
-            title: 'Hallo, ich bin Umesh Joshi',
-            summary: 'Ich bin Masterstudent im Bereich Erneuerbare Energien und E-Mobility mit industrieller Erfahrung in der Batterieentwicklung, Modellierung, Prüfung und Validierung.',
-            expTitle: 'BERUFSERFAHRUNG',
-            eduTitle: 'AUSBILDUNG',
-            exp1: `<h3>Werkstudent – Batterieentwicklung</h3>
-                   <p>Mercedes-Benz AG · Stuttgart</p>
-                   <ul>
-                     <li>Spannungsrelaxationsmodelle für ML-Anwendungen.</li>
-                     <li>Analyse von Anomalie-Datensätzen aus Batteriemessungen.</li>
-                   </ul>`,
-            thanks: 'Vielen Dank für Ihren Besuch.'
-        }
-    };
-
-    // Language Setter
-    function setLang(lang) {
-        const text = CONTENT[lang];
-        document.getElementById('title').innerHTML = text.title;
-        document.getElementById('summary').innerHTML = text.summary;
-        document.getElementById('expTitle').innerHTML = text.expTitle;
-        document.getElementById('eduTitle').innerHTML = text.eduTitle;
-        document.getElementById('exp1').innerHTML = text.exp1;
-        document.getElementById('thanks').innerHTML = text.thanks;
+        // --- LOGIC ---
+        let currentLang = 'en'; // default
+        let slideIndex = -1; // -1 means language selection screen
         
-        // Auto-advance after selection
-        nextSlide();
-    }
-</script>
+        const contentDiv = document.getElementById('content');
+        const bgDiv = document.getElementById('bg-image');
+        const nextBtn = document.getElementById('nextBtn');
+        const nextText = document.getElementById('nextText');
 
+        // Initial Load: Language Selection
+        function loadLanguageScreen() {
+            // Set generic tech background
+            bgDiv.style.backgroundImage = "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop')";
+            
+            contentDiv.innerHTML = `
+                <h1>Welcome / Willkommen</h1>
+                <p>Please select your preferred language<br>Bitte wählen Sie Ihre bevorzugte Sprache</p>
+                <div class="btn-group">
+                    <button class="btn" onclick="startPortfolio('en')">English</button>
+                    <button class="btn" onclick="startPortfolio('de')">Deutsch</button>
+                </div>
+            `;
+            contentDiv.classList.add('active');
+            nextBtn.style.display = 'none';
+        }
+
+        // Start the Loop
+        function startPortfolio(lang) {
+            currentLang = lang;
+            slideIndex = 0;
+            
+            // Update Next Button Text based on language
+            nextText.innerText = lang === 'en' ? "NEXT" : "WEITER";
+            
+            // Fade out current content, then load next
+            contentDiv.classList.remove('active');
+            setTimeout(() => {
+                renderSlide();
+                nextBtn.style.display = 'flex';
+            }, 800);
+        }
+
+        // Handle "Next" Click
+        function nextSlide() {
+            const totalSlides = data[currentLang].length;
+            
+            if (slideIndex < totalSlides - 1) {
+                // Fade out
+                contentDiv.classList.remove('active');
+                
+                setTimeout(() => {
+                    slideIndex++;
+                    renderSlide();
+                }, 800);
+            } else {
+                // Restart loop
+                slideIndex = 0;
+                contentDiv.classList.remove('active');
+                setTimeout(() => {
+                    renderSlide();
+                }, 800);
+            }
+        }
+
+        // Render the current slide based on data
+        function renderSlide() {
+            const slide = data[currentLang][slideIndex];
+            
+            // Update Background
+            if(slide.bg) {
+                bgDiv.style.backgroundImage = `url('${slide.bg}')`;
+            }
+
+            // Build HTML based on slide type
+            let html = '';
+
+            if (slide.type === 'intro') {
+                // Intro Slide with Photo
+                html = `
+                    <img src="YOUR_PHOTO_HERE.jpg" alt="Umesh Joshi" class="profile-photo">
+                    <h1>${slide.title}</h1>
+                    <h3>${slide.subtitle}</h3>
+                    <p>${slide.text}</p>
+                `;
+            } else if (slide.type === 'title') {
+                // Big Section Title (Experience, Education)
+                html = `<h1>${slide.title}</h1>`;
+            } else if (slide.type === 'content') {
+                // Standard Content Slide
+                html = `
+                    <h2>${slide.title}</h2>
+                    <h4>${slide.role}</h4>
+                    ${slide.isSkills ? generateSkills(slide.skills) : `<p>${slide.details}</p>`}
+                `;
+            } else if (slide.type === 'end') {
+                // Contact Slide
+                html = `
+                    <h1>${slide.title}</h1>
+                    <h3>${slide.subtitle}</h3>
+                    <div class="contact-links" style="margin-top: 2rem;">
+                        <a href="mailto:studentumeshjoshi@gmail.com">Email</a>
+                        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                        <a href="https://xing.com" target="_blank">XING</a>
+                        <a href="https://indeed.com" target="_blank">Indeed</a>
+                        <a href="https://stepstone.de" target="_blank">Stepstone</a>
+                    </div>
+                    <p style="margin-top: 3rem; font-size: 0.8rem; opacity: 0.7;">
+                        ${currentLang === 'en' ? 'Click Next to restart' : 'Klicken Sie auf Weiter, um neu zu starten'}
+                    </p>
+                `;
+            }
+
+            contentDiv.innerHTML = html;
+            contentDiv.classList.add('active');
+        }
+
+        // Helper to generate skill tags
+        function generateSkills(skillsArray) {
+            return skillsArray.map(skill => `<span class="skills-tag">${skill}</span>`).join('');
+        }
+
+        // Initialize
+        loadLanguageScreen();
+
+    </script>
 </body>
 </html>
