@@ -3,199 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Umesh Joshi | Engineering Portfolio</title>
+    <title>Umesh Joshi | Portfolio</title>
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
             --primary: #3498db; 
-            --accent: #f1c40f; /* Gold for highlights */
-            --dark: #0f172a;    
-            --light: #f8fafc;   
-            --overlay: rgba(15, 23, 42, 0.9);
+            --white: #ffffff;
             --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
         
         body { 
-            background-color: var(--dark); 
-            color: var(--light); 
+            background-color: #0f172a; 
+            color: var(--white); 
             overflow: hidden; 
             height: 100vh; 
             width: 100vw; 
-            user-select: none; /* Prevent text highlighting on clicks */
+            user-select: none;
         }
 
-        /* --- DYNAMIC BACKGROUNDS --- */
+        /* --- BACKGROUNDS (Time Based) --- */
         #bg-image {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover;
             background-position: center;
-            z-index: -2;
-            transition: background-image 1.2s ease-in-out, opacity 1s;
-        }
-
-        /* Specific Backgrounds for Time of Day (CSS Generated) */
-        .bg-day { background: linear-gradient(to bottom, #2980b9, #87CEFA); }
-        .bg-sunset { background: linear-gradient(to bottom, #2c3e50, #fd746c, #ff9068); }
-        .bg-night { 
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); 
-            overflow: hidden;
-        }
-        
-        /* Stars for Night Mode */
-        .stars {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: transparent;
-            z-index: -1;
-            display: none; /* Hidden by default */
-        }
-        .bg-night .stars { display: block; background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px); background-size: 550px 550px; }
-
-        /* Overlay */
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--overlay);
-            z-index: -1;
+            z-index: -3;
             transition: opacity 1s;
         }
-        /* Less overlay on start screen to see the "sky" */
-        .start-mode .overlay { opacity: 0.3; } 
 
-        /* --- SLIDE CONTAINER & TRANSITIONS --- */
-        .slide-container {
+        /* CSS Generated Skies */
+        .bg-day { background: linear-gradient(to bottom, #2980b9, #87CEFA); }
+        .bg-sunset { background: linear-gradient(to bottom, #2c3e50, #fd746c, #ff9068); }
+        .bg-night { background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); }
+        
+        /* Stars (Only visible at night) */
+        .stars {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px);
+            background-size: 550px 550px;
+            z-index: -2;
+            display: none;
+        }
+        .bg-night .stars { display: block; }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); /* Lighter overlay to see the sky */
+            z-index: -1;
+        }
+
+        /* --- SCREENS --- */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100%;
-            padding: 2rem;
-            text-align: center;
             opacity: 0;
-            transform: scale(0.95) translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            pointer-events: none; /* Prevent clicks when hidden */
-            position: absolute;
-            width: 100%;
+            pointer-events: none;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(20px);
         }
 
-        .slide-container.active {
+        .screen.active {
             opacity: 1;
-            transform: scale(1) translateY(0);
             pointer-events: all;
+            transform: translateY(0);
         }
 
-        /* --- TYPOGRAPHY --- */
-        h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; letter-spacing: -1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; }
-        h3 { font-size: 1.5rem; margin-bottom: 1rem; font-weight: 300; }
-        h4 { font-size: 1.2rem; color: #cbd5e1; margin-bottom: 1.5rem; font-style: italic; }
-        p { font-size: 1.15rem; line-height: 1.8; max-width: 800px; margin: 0 auto 1rem auto; color: #e2e8f0; }
-
-        /* BIG SECTION TITLES (Experience, Education) */
-        .section-title h1 {
-            font-size: 6rem; /* Massive */
-            text-transform: uppercase;
-            letter-spacing: 10px;
-            background: -webkit-linear-gradient(#eee, #333);
-            -webkit-background-clip: text;
-            /* -webkit-text-fill-color: transparent; */ /* Optional: transparent gradient text */
-            color: #fff;
-            animation: tracking-in 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
-        }
-
-        @keyframes tracking-in {
-            0% { letter-spacing: -0.5em; opacity: 0; }
-            40% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
-        /* Skills Tags */
-        .skills-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 800px; }
-        .skills-tag { 
-            background: rgba(255, 255, 255, 0.1); 
-            border-left: 3px solid var(--primary); 
-            padding: 8px 20px; 
-            font-size: 1rem; 
-            backdrop-filter: blur(5px);
-            transition: transform 0.2s;
-        }
-        .skills-tag:hover { transform: translateY(-3px); background: rgba(52, 152, 219, 0.3); }
-
-        /* --- CIRCULAR GREETING ANIMATION --- */
-        .greeting-circle {
+        /* --- SCREEN 1: HELLO CLOUD (Word Cloud) --- */
+        .hello-cloud {
             position: relative;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 3rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            max-width: 800px;
         }
         
-        .main-hello {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #fff;
-            z-index: 10;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        .orbit-text {
-            position: absolute;
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.6);
-            white-space: nowrap;
-            animation: spin 20s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        /* The artistic text positioning */
+        .cloud-word { position: absolute; color: rgba(255,255,255,0.8); font-weight: bold; }
+        
+        .w-main { 
+            font-size: 5rem; color: #fff; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); z-index: 10; 
+            text-shadow: 0 0 20px rgba(255,255,255,0.4);
         }
         
-        /* Stagger animations for different languages */
-        .orbit-text:nth-child(2) { animation-delay: -0s; }
-        .orbit-text:nth-child(3) { animation-delay: -4s; }
-        .orbit-text:nth-child(4) { animation-delay: -8s; }
-        .orbit-text:nth-child(5) { animation-delay: -12s; }
-        .orbit-text:nth-child(6) { animation-delay: -16s; }
+        /* Scattered words */
+        .w-1 { top: 20%; left: 20%; font-size: 1.5rem; transform: rotate(-10deg); }
+        .w-2 { top: 15%; right: 25%; font-size: 2rem; }
+        .w-3 { bottom: 25%; left: 15%; font-size: 2.5rem; font-family: serif; }
+        .w-4 { bottom: 20%; right: 20%; font-size: 1.8rem; transform: rotate(5deg); }
+        .w-5 { top: 40%; left: 10%; font-size: 1.4rem; transform: rotate(-90deg); }
+        .w-6 { top: 35%; right: 10%; font-size: 1.6rem; opacity: 0.7; }
+        .w-7 { bottom: 10%; left: 40%; font-size: 1.8rem; }
+        .w-8 { top: 10%; left: 45%; font-size: 1.5rem; }
+        .w-9 { top: 60%; right: 5%; font-size: 1.5rem; transform: rotate(90deg); }
+        .w-10 { top: 60%; left: 25%; font-size: 1.2rem; }
 
-        /* --- NAVIGATION BUTTONS --- */
-        .nav-btn {
-            position: absolute;
-            bottom: 40px;
-            cursor: pointer;
-            z-index: 100;
-            font-size: 1.1rem;
-            font-weight: bold;
+        .welcome-line {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
+            border-top: 1px solid white;
+            padding-top: 1rem;
+        }
+
+        /* --- SCREEN 2: LANGUAGES --- */
+        .lang-btn {
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            margin: 20px;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
             transition: 0.3s;
-            opacity: 0.7;
+            text-transform: uppercase;
         }
+        .lang-btn:hover { background: white; color: var(--primary); transform: scale(1.05); }
 
-        .nav-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--primary); }
-
-        .next-btn { right: 40px; color: var(--primary); animation: pulse 2s infinite; }
-        .prev-btn { left: 40px; color: #fff; display: none; } /* Hidden initially */
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* Profile Photo */
+        /* --- CONTENT SLIDES --- */
         .profile-photo {
-            width: 180px; height: 180px;
+            width: 200px; height: 200px;
             border-radius: 50%;
             border: 4px solid var(--primary);
             object-fit: cover;
@@ -203,79 +136,98 @@
             box-shadow: 0 0 30px rgba(52, 152, 219, 0.4);
         }
 
-        /* Language Buttons */
-        .btn-group { margin-top: 2rem; z-index: 20; position: relative;}
-        .lang-btn {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.3);
-            color: #fff;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            backdrop-filter: blur(4px);
-        }
-        .lang-btn:hover { background: var(--primary); border-color: var(--primary); }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
+        h4 { font-size: 1.2rem; color: #cbd5e1; margin-bottom: 1.5rem; font-style: italic; }
+        p { font-size: 1.2rem; line-height: 1.6; max-width: 800px; text-align: center; }
 
-        /* Click Zones for Arrows */
-        .click-zone-right { position: absolute; right: 0; top: 0; width: 30%; height: 100%; z-index: 5; cursor: e-resize; }
-        .click-zone-left { position: absolute; left: 0; top: 0; width: 10%; height: 100%; z-index: 5; cursor: w-resize; display: none; }
+        .skills-tag { 
+            display: inline-block; padding: 8px 20px; margin: 5px;
+            background: rgba(255,255,255,0.1); border-left: 3px solid var(--primary);
+        }
+
+        /* --- NAVIGATION UI --- */
+        .nav-ui {
+            position: absolute; bottom: 30px; width: 100%;
+            display: flex; justify-content: space-between; padding: 0 40px;
+            z-index: 100;
+        }
+        .nav-btn {
+            font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            color: white; opacity: 0.7; transition: 0.3s;
+            text-transform: uppercase; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-btn:hover { opacity: 1; color: var(--primary); }
+        .btn-next { animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+
+        /* Click Zones */
+        .click-zone { position: absolute; top:0; height: 100%; z-index: 50; }
+        .zone-right { right: 0; width: 40%; cursor: e-resize; }
+        .zone-left { left: 0; width: 15%; cursor: w-resize; }
 
     </style>
 </head>
-<body onload="initTimeBasedBackground()">
+<body onload="initSystem()">
 
     <div id="stars-layer" class="stars"></div>
     <div id="bg-image"></div>
-    <div class="overlay" id="main-overlay"></div>
+    <div class="overlay"></div>
 
-    <div class="click-zone-right" onclick="nextSlide()"></div>
-    <div class="click-zone-left" id="zoneLeft" onclick="prevSlide()"></div>
+    <div class="click-zone zone-left" onclick="goBack()"></div>
+    <div class="click-zone zone-right" onclick="goNext()"></div>
 
-    <div id="splash-screen" class="slide-container active">
-        <div class="greeting-circle">
-            <div class="main-hello" id="center-hello">Hallo</div>
-            <div class="orbit-text">Hello</div>
-            <div class="orbit-text">Namaskar</div>
-            <div class="orbit-text">Bonjour</div>
-            <div class="orbit-text">Hola</div>
-            <div class="orbit-text">Guten Tag</div>
+    <div id="screen-hello" class="screen active">
+        <div class="hello-cloud">
+            <span class="cloud-word w-main">Hello</span>
+            <span class="cloud-word w-1">Namaskar</span>
+            <span class="cloud-word w-2">Bonjour</span>
+            <span class="cloud-word w-3">Hallo</span>
+            <span class="cloud-word w-4">Hola</span>
+            <span class="cloud-word w-5">Ciao</span>
+            <span class="cloud-word w-6">Salaam</span>
+            <span class="cloud-word w-7">Guten Tag</span>
+            <span class="cloud-word w-8">Konnichiwa</span>
+            <span class="cloud-word w-9">Jambo</span>
+            <span class="cloud-word w-10">Zdravstvuyte</span>
         </div>
+        <div class="welcome-line">Welcome</div>
         
-        <p id="time-msg" style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 2rem;"></p>
-        
-        <div class="btn-group">
-            <button class="lang-btn" onclick="startPortfolio('en')">English</button>
-            <button class="lang-btn" onclick="startPortfolio('de')">Deutsch</button>
+        <div class="nav-ui" style="justify-content: flex-end;">
+            <div class="nav-btn btn-next" onclick="goToLanguages()">Start &#8594;</div>
         </div>
     </div>
 
-    <div id="content-screen" class="slide-container">
+    <div id="screen-lang" class="screen">
+        <h1>Select Language / Sprache Wählen</h1>
+        <div style="margin-top: 30px;">
+            <button class="lang-btn" onclick="selectLang('en')">English</button>
+            <button class="lang-btn" onclick="selectLang('de')">Deutsch</button>
         </div>
-
-    <div class="nav-btn prev-btn" id="prevBtn" onclick="prevSlide()">
-        <span>&#8592;</span> <span id="prevText">BACK</span>
     </div>
 
-    <div class="nav-btn next-btn" id="nextBtn" onclick="nextSlide()" style="display: none;">
-        <span id="nextText">NEXT</span> <span>&#8594;</span>
+    <div id="screen-content" class="screen">
+        </div>
+
+    <div id="global-nav" class="nav-ui" style="display: none;">
+        <div class="nav-btn" onclick="goBack()">&#8592; <span id="txt-back">Back</span></div>
+        <div class="nav-btn btn-next" onclick="goNext()"><span id="txt-next">Next</span> &#8594;</div>
     </div>
 
     <script>
-        // --- DATA REPOSITORY ---
-        [cite_start]// Includes citations from your CV [cite: 1, 49, 12, 32]
+        // --- CONTENT DATA ---
         const data = {
             en: [
                 {
+                    // SLIDE 0: SUMMARY
                     type: "intro",
                     bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
                     title: "Hello, I am Umesh Joshi",
                     subtitle: "M.Eng. Renewable Energies & E-Mobility",
-                    text: "Electrical Engineer specializing in Battery Development, Algorithms, and System Validation.",
-                    photo: true
+                    text: "An innovative Electrical Engineer specializing in Battery Development, Algorithms, and System Validation. Currently shaping the future of EV technology.",
                 },
-                { type: "section", title: "EXPERIENCE", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" }, // Car visuals
+                { type: "title", title: "EXPERIENCE", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
                     bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?auto=format&fit=crop&w=1920&q=80",
@@ -297,12 +249,12 @@
                     role: "Battery System Tests (05.2023 - 01.2024)",
                     details: "Validation of battery systems & ECUs.<br>• Analyzed measurement results using X-Frame and DIAdem.<br>• Supported hardware design of microcontrollers."
                 },
-                { type: "section", title: "EDUCATION", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
+                { type: "title", title: "EDUCATION", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
                     bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
                     title: "Hochschule Stralsund",
-                    role: "Master in Renewable Energies & E-Mobility",
+                    role: "Master in Renewable Energies",
                     details: "Focus: Vehicle Simulation, Hydrogen Tech, Electric Drives Control."
                 },
                 {
@@ -327,10 +279,9 @@
                     bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
                     title: "Hallo, ich bin Umesh Joshi",
                     subtitle: "M.Eng. Erneuerbare Energien & E-Mobilität",
-                    text: "Elektroingenieur spezialisiert auf Batterieentwicklung, Algorithmen und Systemvalidierung.",
-                    photo: true
+                    text: "Elektroingenieur spezialisiert auf Batterieentwicklung, Algorithmen und Systemvalidierung. Ich gestalte die Zukunft der E-Mobilität.",
                 },
-                { type: "section", title: "ERFAHRUNG", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" },
+                { type: "title", title: "ERFAHRUNG", bg: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
                     bg: "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?auto=format&fit=crop&w=1920&q=80",
@@ -352,7 +303,7 @@
                     role: "Batteriesystemtests (05.2023 - 01.2024)",
                     details: "Validierung von Batteriesystemen.<br>• Auswertung mit X-Frame und DIAdem.<br>• Hardware-Design von Mikrocontrollern."
                 },
-                { type: "section", title: "AUSBILDUNG", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
+                { type: "title", title: "AUSBILDUNG", bg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" },
                 {
                     type: "content",
                     bg: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1920&q=80",
@@ -378,156 +329,153 @@
             ]
         };
 
-        // --- STATE & VARIABLES ---
+        // --- STATE MANAGEMENT ---
         let currentLang = 'en';
         let slideIndex = 0;
-        let isStarted = false;
+        let appState = 'hello'; // 'hello', 'lang', 'content'
 
-        const splashScreen = document.getElementById('splash-screen');
-        const contentScreen = document.getElementById('content-screen');
+        // DOM Elements
+        const screenHello = document.getElementById('screen-hello');
+        const screenLang = document.getElementById('screen-lang');
+        const screenContent = document.getElementById('screen-content');
+        const globalNav = document.getElementById('global-nav');
         const bgDiv = document.getElementById('bg-image');
-        const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const overlay = document.getElementById('main-overlay');
-        const zoneLeft = document.getElementById('zoneLeft');
 
-        // --- 1. TIME-BASED BACKGROUND LOGIC ---
-        function initTimeBasedBackground() {
+        function initSystem() {
+            // 1. Time-based Background (No text, just visual)
             const hour = new Date().getHours();
-            const timeMsg = document.getElementById('time-msg');
             const body = document.body;
+            body.className = ""; // clear
+            
+            if (hour >= 6 && hour < 18) { body.classList.add('bg-day'); }
+            else if (hour >= 18 && hour < 20) { body.classList.add('bg-sunset'); }
+            else { body.classList.add('bg-night'); }
+        }
 
-            // Remove any existing bg classes
-            body.classList.remove('bg-day', 'bg-sunset', 'bg-night');
-            body.classList.add('start-mode'); // Less overlay transparency
+        // --- NAVIGATION HANDLERS ---
 
-            if (hour >= 6 && hour < 18) {
-                // DAY (6 AM - 6 PM)
-                body.classList.add('bg-day');
-                timeMsg.innerText = "Current Atmosphere: Sunny/Cloudy Day";
-            } else if (hour >= 18 && hour < 20) {
-                // SUNSET (6 PM - 8 PM)
-                body.classList.add('bg-sunset');
-                timeMsg.innerText = "Current Atmosphere: Sunset Evening";
-            } else {
-                // NIGHT (8 PM - 6 AM)
-                body.classList.add('bg-night');
-                timeMsg.innerText = "Current Atmosphere: Clear Night Sky";
+        function goToLanguages() {
+            appState = 'lang';
+            switchScreen(screenHello, screenLang);
+        }
+
+        function selectLang(lang) {
+            currentLang = lang;
+            document.getElementById('txt-next').innerText = lang === 'en' ? "Next" : "Weiter";
+            document.getElementById('txt-back').innerText = lang === 'en' ? "Back" : "Zurück";
+            
+            appState = 'content';
+            slideIndex = 0;
+            renderSlide();
+            
+            // Switch to content screen
+            switchScreen(screenLang, screenContent);
+            
+            // Show global nav
+            setTimeout(() => { globalNav.style.display = 'flex'; }, 800);
+        }
+
+        function goNext() {
+            if (appState === 'hello') goToLanguages();
+            else if (appState === 'lang') return; // Must select language button
+            else if (appState === 'content') {
+                if (slideIndex < data[currentLang].length - 1) {
+                    slideIndex++;
+                    renderSlide();
+                } else {
+                    // Loop back to start of content
+                    slideIndex = 0;
+                    renderSlide();
+                }
             }
         }
 
-        // --- 2. START PORTFOLIO ---
-        function startPortfolio(lang) {
-            currentLang = lang;
-            isStarted = true;
-            slideIndex = 0;
+        function goBack() {
+            if (appState === 'hello') return;
+            if (appState === 'lang') {
+                appState = 'hello';
+                switchScreen(screenLang, screenHello);
+            }
+            if (appState === 'content') {
+                if (slideIndex > 0) {
+                    slideIndex--;
+                    renderSlide();
+                } else {
+                    // Back to Language Selection
+                    appState = 'lang';
+                    globalNav.style.display = 'none';
+                    switchScreen(screenContent, screenLang);
+                }
+            }
+        }
 
-            // Update UI Text
-            document.getElementById('nextText').innerText = lang === 'en' ? "NEXT" : "WEITER";
-            document.getElementById('prevText').innerText = lang === 'en' ? "BACK" : "ZURÜCK";
+        // --- HELPER FUNCTIONS ---
 
-            // Hide Splash, Show Nav
-            splashScreen.classList.remove('active');
-            document.body.classList.remove('start-mode'); // Darken overlay
-            
+        function switchScreen(from, to) {
+            from.classList.remove('active');
             setTimeout(() => {
-                splashScreen.style.display = 'none';
-                contentScreen.style.display = 'flex';
-                nextBtn.style.display = 'flex';
-                prevBtn.style.display = 'flex';
-                zoneLeft.style.display = 'block';
-                renderSlide();
+                to.classList.add('active');
             }, 800);
         }
 
-        // --- 3. NAVIGATION LOGIC ---
-        function nextSlide() {
-            if (!isStarted) return;
-            const totalSlides = data[currentLang].length;
+        function renderSlide() {
+            // Fade out content first
+            screenContent.classList.remove('active');
 
-            if (slideIndex < totalSlides - 1) {
-                transitionToSlide(slideIndex + 1);
-            } else {
-                // Loop back to start (optional) or stay at end
-                 transitionToSlide(0); 
-            }
-        }
-
-        function prevSlide() {
-            if (!isStarted || slideIndex === 0) return;
-            transitionToSlide(slideIndex - 1);
-        }
-
-        function transitionToSlide(newIndex) {
-            // Fade out current
-            contentScreen.classList.remove('active');
-            
             setTimeout(() => {
-                slideIndex = newIndex;
-                renderSlide();
+                const slide = data[currentLang][slideIndex];
+                
+                // Update BG if provided
+                if (slide.bg) {
+                    // Reset body classes to show image clearly
+                    document.body.className = ""; 
+                    bgDiv.style.backgroundImage = `url('${slide.bg}')`;
+                    bgDiv.style.opacity = '1';
+                }
+
+                let html = '';
+
+                if (slide.type === 'intro') {
+                    html = `
+                        <img src="avatar.jpg" alt="Profile" class="profile-photo">
+                        <h1>${slide.title}</h1>
+                        <h3>${slide.subtitle}</h3>
+                        <p>${slide.text}</p>
+                    `;
+                } else if (slide.type === 'title') {
+                    html = `<h1 style="font-size: 5rem; text-transform:uppercase; letter-spacing:10px;">${slide.title}</h1>`;
+                } else if (slide.type === 'content') {
+                    html = `
+                        <h2>${slide.title}</h2>
+                        <h4>${slide.role}</h4>
+                        ${slide.isSkills ? 
+                            `<div style="max-width:800px; text-align:center;">${slide.skills.map(s => `<span class="skills-tag">${s}</span>`).join('')}</div>` : 
+                            `<p>${slide.details}</p>`
+                        }
+                    `;
+                } else if (slide.type === 'end') {
+                    html = `
+                        <h1>${slide.title}</h1>
+                        <h3>${slide.subtitle}</h3>
+                        <div style="margin-top:2rem;">
+                            <a href="mailto:studentumeshjoshi@gmail.com" class="lang-btn" style="text-decoration:none; font-size:1rem;">Email</a>
+                            <a href="https://linkedin.com" target="_blank" class="lang-btn" style="text-decoration:none; font-size:1rem;">LinkedIn</a>
+                            <a href="https://xing.com" target="_blank" class="lang-btn" style="text-decoration:none; font-size:1rem;">XING</a>
+                        </div>
+                    `;
+                }
+
+                screenContent.innerHTML = html;
+                screenContent.classList.add('active');
             }, 600);
         }
 
-        // --- 4. KEYBOARD CONTROLS ---
-        document.addEventListener('keydown', function(event) {
-            if (!isStarted) return;
-            if (event.key === "ArrowRight") {
-                nextSlide();
-            } else if (event.key === "ArrowLeft") {
-                prevSlide();
-            }
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") goNext();
+            if (e.key === "ArrowLeft") goBack();
         });
 
-        // --- 5. RENDER CONTENT ---
-        function renderSlide() {
-            const slide = data[currentLang][slideIndex];
-            
-            // Update Background Image
-            if (slide.bg) {
-                // Remove CSS gradients from body to show image
-                document.body.className = ''; 
-                bgDiv.style.backgroundImage = `url('${slide.bg}')`;
-                bgDiv.style.opacity = '1';
-            }
-
-            // Build HTML
-            let html = '';
-
-            if (slide.type === 'intro') {
-                html = `
-                    <img src="avatar.jpg" alt="Umesh Joshi" class="profile-photo">
-                    <h1>${slide.title}</h1>
-                    <h3>${slide.subtitle}</h3>
-                    <p>${slide.text}</p>
-                `;
-            } else if (slide.type === 'section') {
-                // Massive Section Title
-                html = `<div class="section-title"><h1>${slide.title}</h1></div>`;
-            } else if (slide.type === 'content') {
-                html = `
-                    <h2>${slide.title}</h2>
-                    <h4>${slide.role}</h4>
-                    ${slide.isSkills ? `<div class="skills-grid">${slide.skills.map(s => `<span class="skills-tag">${s}</span>`).join('')}</div>` : `<p>${slide.details}</p>`}
-                `;
-            } else if (slide.type === 'end') {
-                html = `
-                    <h1>${slide.title}</h1>
-                    <h3>${slide.subtitle}</h3>
-                    <div style="margin-top:2rem; display:flex; gap:15px; justify-content:center;">
-                        <a href="mailto:studentumeshjoshi@gmail.com" class="skills-tag" style="text-decoration:none; color:white;">Email</a>
-                        <a href="https://linkedin.com" target="_blank" class="skills-tag" style="text-decoration:none; color:white;">LinkedIn</a>
-                        <a href="https://xing.com" target="_blank" class="skills-tag" style="text-decoration:none; color:white;">XING</a>
-                    </div>
-                `;
-            }
-
-            contentScreen.innerHTML = html;
-            
-            // Small delay to trigger CSS transition 'in'
-            requestAnimationFrame(() => {
-                contentScreen.classList.add('active');
-            });
-        }
     </script>
 </body>
 </html>
